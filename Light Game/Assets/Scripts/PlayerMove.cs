@@ -38,7 +38,7 @@ public class PlayerMove : MonoBehaviour
         }
 
 
-        else
+        else if (pointer.FinalObject.tag == "AttachableSurface")
         {
             // Attempt teleport
             Vector2 oldPosition = transform.position;
@@ -50,5 +50,8 @@ public class PlayerMove : MonoBehaviour
             transform.up = pointer.ObjectNormal;
 
         }
+
+        else
+            pointer.SetColor(Color.red);
     }
 }

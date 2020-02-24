@@ -14,6 +14,7 @@ public class Pointer : MonoBehaviour
     LineRenderer lr;
     Ray ray;
     RaycastHit2D hit;
+    float t;
 
     #endregion
 
@@ -30,11 +31,20 @@ public class Pointer : MonoBehaviour
     {
         lr = GetComponent<LineRenderer>();
         FinalObject = null;
+        t = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        // Update line color
+        Color color = Color.Lerp(Color.red, Color.white, t);
+        lr.startColor = color;
+        lr.endColor = color;
+        if (t < 1)
+            t += 1/60f;
+
         // Set LightRenderer initial values
         lr.positionCount = 1;
         lr.SetPosition(0, transform.position);
@@ -56,6 +66,8 @@ public class Pointer : MonoBehaviour
             else if (hit.collider.tag == "Prism")
                 PrismRefract();
 
+            numRays++;
+
             // Render line
             AddLineRender();
         }
@@ -73,7 +85,7 @@ public class Pointer : MonoBehaviour
             hit.collider.tag == "ReflectingSurface" || hit.collider.tag == "Prism")
 
             // Set teleport point to same location
-            TeleportPoint = GetComponentInParent<Transform>().GetComponentInParent<Transform>().transform.position;
+            TeleportPoint = GetComponentInParent<Transform>().GetComponentInParent<Transform>().position;
 
         // If on an attachable surface
         else if (hit.collider.tag == "AttachableSurface")
@@ -97,7 +109,9 @@ public class Pointer : MonoBehaviour
 
         // Get out of last object's collider
         while (hit.transform.GetComponent<BoxCollider2D>().OverlapPoint(ray.origin))
+        {
             ray.origin += ray.direction * 0.01f;
+        }
 
         // Set new hit
         hit = Physics2D.Raycast(ray.origin, ray.direction, maxLength);
@@ -107,17 +121,30 @@ public class Pointer : MonoBehaviour
     void PrismRefract()
     {
         // Send ray through prism
-        Vector3 refractedDirection = Quaternion.AngleAxis(-20, Vector3.forward) * ray.direction;
-        ray = new Ray(hit.point, refractedDirection);
-        while (hit.transform.GetComponent<PolygonCollider2D>().OverlapPoint(ray.origin))
+        int tries = 0;
+        ray.origin = hit.point;
+        while (!hit.transform.GetComponent<PolygonCollider2D>().OverlapPoint(ray.origin) && tries < 1000)
+        {
             ray.origin += ray.direction * 0.01f;
+            tries++;
+        }
+        if (hit.transform.GetComponent<PolygonCollider2D>().OverlapPoint(ray.origin))
+        {
+            Vector3 refractedDirection = Quaternion.AngleAxis(-20, Vector3.forward) * ray.direction;
+            ray.direction = refractedDirection;
+            while (hit.transform.GetComponent<PolygonCollider2D>().OverlapPoint(ray.origin))
+            {
+                ray.origin += ray.direction * 0.01f;
+            }
 
-        // Render line through prism
-        lr.positionCount++;
-        lr.SetPosition(lr.positionCount - 1, ray.origin);
+            // Render line through prism
+            lr.positionCount++;
+            lr.SetPosition(lr.positionCount - 1, ray.origin);
 
-        // Send ray to final point
-        ray.direction = Quaternion.AngleAxis(-20, Vector3.forward) * refractedDirection;
+            // Send ray to final point
+            ray.direction = Quaternion.AngleAxis(-20, Vector3.forward) * refractedDirection;
+        }
+        
         hit = Physics2D.Raycast(ray.origin, ray.direction);
 
 
@@ -155,5 +182,11 @@ public class Pointer : MonoBehaviour
             lr.SetPosition(lr.positionCount - 1, ray.origin + (ray.direction * maxLength));
         else
             lr.SetPosition(lr.positionCount - 1, hit.point);
+    }
+
+    // Set the color of the line renderer
+    public void SetColor(Color color)
+    {
+        t = 0;
     }
 }
