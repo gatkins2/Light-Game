@@ -5,13 +5,11 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     Pointer pointer;
-    bool orientedUp;
 
 	// Use this for initialization
 	void Start ()
     {
         pointer = transform.GetChild(0).transform.GetChild(0).GetComponent<Pointer>();
-        orientedUp = true;
 	}
 	
 	// Update is called once per frame
@@ -34,7 +32,7 @@ public class PlayerMove : MonoBehaviour
     void Teleport()
     {
         // Change rooms
-        if (pointer.FinalObject.tag == "RoomChangeBox")
+        if (pointer.FinalObject != null && pointer.FinalObject.tag == "RoomChangeBox")
         {
             pointer.FinalObject.GetComponent<RoomChanger>().ChangeScene();
         }
@@ -47,6 +45,9 @@ public class PlayerMove : MonoBehaviour
             transform.position = pointer.TeleportPoint;
 
             // Revert position if collision is bad
+
+            // Rotate to face up from object's normal
+            transform.up = pointer.ObjectNormal;
 
         }
     }

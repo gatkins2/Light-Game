@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370932302848514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.69, y: -3.57, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6978474941807847521}
@@ -144,7 +144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd82fb01e316d824381860f4fcc0795c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
 --- !u!50 &8056899517970709896
 Rigidbody2D:
   serializedVersion: 4
@@ -306,7 +305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b973cf8e30b5d24d8283161aa7fe335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxReflections: 10
+  maxRays: 10
   maxLength: 1000
 --- !u!1 &4635173120742637724
 GameObject:
