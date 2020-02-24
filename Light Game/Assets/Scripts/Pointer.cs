@@ -38,12 +38,12 @@ public class Pointer : MonoBehaviour
     void Update()
     {
 
-        // Update line color
-        Color color = Color.Lerp(Color.red, Color.white, t);
-        lr.startColor = color;
-        lr.endColor = color;
-        if (t < 1)
-            t += 1/60f;
+        //// Update line color
+        //Color color = Color.Lerp(Color.red, Color.white, t);
+        //lr.startColor = color;
+        //lr.endColor = color;
+        //if (t < 1)
+        //    t += 1/60f;
 
         // Set LightRenderer initial values
         lr.positionCount = 1;
@@ -143,35 +143,24 @@ public class Pointer : MonoBehaviour
 
             // Send ray to final point
             ray.direction = Quaternion.AngleAxis(-20, Vector3.forward) * refractedDirection;
+
+            // Active prism lights
+            RaycastHit2D colorHit;
+            for (int i = 0; i < 4; i++)
+            {
+                hit.transform.GetComponent<Prism>().Active = true;
+                hit.transform.GetComponent<Prism>().FrameBuffer = 1;
+                LineRenderer colorLR = hit.transform.GetChild(i).GetComponent<LineRenderer>();
+                colorLR.SetPosition(0, ray.origin);
+                colorLR.positionCount = 2;
+                Vector3 colorDirection = Quaternion.AngleAxis(-(5 * i), Vector3.forward) * refractedDirection;
+                Ray colorRay = new Ray(ray.origin, colorDirection);
+                colorHit = Physics2D.Raycast(colorRay.origin, colorDirection);
+                colorLR.SetPosition(1, colorHit.point);
+            }
         }
         
         hit = Physics2D.Raycast(ray.origin, ray.direction);
-
-
-        ///////////////////////////////////////////////////////////
-        /// CODE FOR COLORS
-        ///////////////////////////////////////////////////////////
-        //if (hit.collider !=null && hit.transform.tag == "Prism")
-        //{
-        //    // Send ray through prism
-        //    Vector3 refractedDirection = Quaternion.AngleAxis(-20, Vector3.forward) * ray.direction;
-        //    ray = new Ray(hit.point, refractedDirection);
-        //    while(hit.transform.GetComponent<PolygonCollider2D>().OverlapPoint(ray.origin))
-        //            ray.origin += ray.direction * 0.01f;
-
-        //    // Active prism lights
-        //    RaycastHit2D colorHit;
-        //    for (int i=0; i<4; i++)
-        //    {
-        //        LineRenderer colorLR = hit.transform.GetChild(i).GetComponent<LineRenderer>();
-        //        colorLR.SetPosition(0, ray.origin);
-        //        colorLR.positionCount = 2;
-        //        Vector3 colorDirection = Quaternion.AngleAxis(-(5*i), Vector3.forward) * refractedDirection;
-        //        Ray colorRay = new Ray(ray.origin, colorDirection);
-        //        colorHit = Physics2D.Raycast(colorRay.origin, colorDirection);
-        //        colorLR.SetPosition(1, colorHit.point);
-        //    }
-        //}
     }
 
     // Adds a portion of the line and renders it

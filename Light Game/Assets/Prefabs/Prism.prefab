@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1858639412957998406}
   - component: {fileID: 1858639412957998407}
   - component: {fileID: 4239230019933639415}
+  - component: {fileID: 3328858934803521190}
   m_Layer: 0
   m_Name: Prism
   m_TagString: Prism
@@ -121,6 +122,18 @@ PolygonCollider2D:
       - {x: 0.64, y: -0.64}
       - {x: 0.64, y: -0.57}
       - {x: 0.51, y: -0.29}
+--- !u!114 &3328858934803521190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858639412957998404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38009e58232cd14e9d2e9717d3ace06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2699269213770837345
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,6 +144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6088823808986065838}
   - component: {fileID: 192331147113510777}
+  - component: {fileID: 6276007618371861728}
   m_Layer: 0
   m_Name: GreenLight
   m_TagString: Untagged
@@ -257,6 +271,20 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &6276007618371861728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2699269213770837345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b973cf8e30b5d24d8283161aa7fe335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRays: 0
+  maxLength: 0
 --- !u!1 &5580567874952588552
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,6 +295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 969075198281746217}
   - component: {fileID: 4450238152596781895}
+  - component: {fileID: 400829496922490776}
   m_Layer: 0
   m_Name: RedLight
   m_TagString: Untagged
@@ -393,6 +422,20 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &400829496922490776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5580567874952588552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b973cf8e30b5d24d8283161aa7fe335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRays: 0
+  maxLength: 0
 --- !u!1 &6675604906651613192
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,6 +446,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3451167758112037971}
   - component: {fileID: 165215446046235755}
+  - component: {fileID: 4367628523715351156}
   m_Layer: 0
   m_Name: YellowLight
   m_TagString: Untagged
@@ -529,6 +573,20 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &4367628523715351156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6675604906651613192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b973cf8e30b5d24d8283161aa7fe335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRays: 0
+  maxLength: 0
 --- !u!1 &7318283044086937329
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,6 +597,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6782283122962091211}
   - component: {fileID: 7872638900453863289}
+  - component: {fileID: 873440416333993858}
   m_Layer: 0
   m_Name: BlueLight
   m_TagString: Untagged
@@ -665,3 +724,17 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &873440416333993858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7318283044086937329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b973cf8e30b5d24d8283161aa7fe335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRays: 0
+  maxLength: 0
