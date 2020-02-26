@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Prism : MonoBehaviour
 {
+    [SerializeField]
+    Sprite prismSprite, activePrismSprite;
+
     LineRenderer redLine, yellowLine, greenLine, blueLine;
     LineRenderer[] lines;
 
@@ -37,12 +40,17 @@ public class Prism : MonoBehaviour
             FrameBuffer--;
         else
             Active = false;
-        if (!Active)
+        if (Active)
         {
             foreach (LineRenderer lr in lines)
-            {
-                lr.positionCount = 1;
-            }
+                lr.enabled = true;
+            GetComponent<SpriteRenderer>().sprite = activePrismSprite;
+        }
+        else
+        {
+            foreach (LineRenderer lr in lines)
+                lr.enabled = false;
+            GetComponent<SpriteRenderer>().sprite = prismSprite;
         }
     }
 

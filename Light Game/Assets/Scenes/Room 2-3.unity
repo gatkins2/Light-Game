@@ -1691,7 +1691,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 01fbbe0b054bb6d42adb392d53d3e83a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5082,6 +5082,75 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2133637732}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2093835117
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5159899019860301490, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159899019860301490, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159899019860301490, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159899019860301490, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159899019860301490, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159899019860301490, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159899019860301490, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159899019860301490, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159899019860301490, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159899019860301490, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159899019860301490, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443687841643681060, guid: 2ba43eead43105649bcb0eb022160358,
+        type: 3}
+      propertyPath: m_Name
+      value: Black_hole
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2ba43eead43105649bcb0eb022160358, type: 3}
 --- !u!1001 &2133637732
 PrefabInstance:
   m_ObjectHideFlags: 0

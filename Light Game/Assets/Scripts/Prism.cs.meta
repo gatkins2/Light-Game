@@ -3,7 +3,10 @@ guid: e38009e58232cd14e9d2e9717d3ace06
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - prismSprite: {fileID: 21300000, guid: 4fecc98209f1c0a4da36f27abe70da59, type: 3}
+  - activePrismSprite: {fileID: 21300000, guid: e979c2cd292f99f4eb89ed0a67f6da40,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
