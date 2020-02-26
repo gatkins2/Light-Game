@@ -5,12 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour
 {
+    [SerializeField]
+    GameObject trailingLight;
+    [SerializeField]
+    Sprite emptySprite;
+
     Pointer pointer;
+    Sprite defaultSprite;
+
+    public bool Travelling { private get; set; }
 
 	// Use this for initialization
 	void Start ()
     {
         pointer = transform.GetChild(0).transform.GetChild(0).GetComponent<Pointer>();
+        defaultSprite = GetComponent<SpriteRenderer>().sprite;
 	}
 	
 	// Update is called once per frame
@@ -21,7 +30,11 @@ public class PlayerMove : MonoBehaviour
         {
             Teleport();
         }
-	}
+
+        // Set sprite to inactive while light sprite travels
+        if (!Travelling)
+            GetComponent<Animator>().SetBool("Travelling", false);
+    }
 
     // Called on collision
     void OnCollisionEnter2D(Collision2D collision)
@@ -54,6 +67,18 @@ public class PlayerMove : MonoBehaviour
             // Rotate to face up from object's normal
             transform.up = pointer.ObjectNormal;
 
+            // Set light to trail after
+            List<Vector2> lightList = new List<Vector2>();
+            foreach (Vector2 v in pointer.path)
+                lightList.Add(v);
+            GameObject light = GameObject.Instantiate(trailingLight, lightList[0], Quaternion.identity);
+            light.GetComponent<TrailingLight>().player = this;
+            light.GetComponent<TrailingLight>().path = lightList;
+            Travelling = true;
+            GetComponent<Animator>().SetBool("Travelling", true);
+
+            // Play teleport sound
+            GetComponent<AudioSource>().Play();
         }
 
         else

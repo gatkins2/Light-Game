@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 898af287d6399ec40a71b71659bf44cc
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - trailingLightPrefab: {fileID: 4818698090389521948, guid: d61536efe1422e24c855adf0dce6bd08,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

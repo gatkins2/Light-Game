@@ -25,7 +25,7 @@ public class Pointer : MonoBehaviour
     public Vector2 TeleportPoint { get; private set; }  // Point to teleport to
     public Transform FinalObject { get; private set; }  // Final object hit by the pointer
     public Vector2 ObjectNormal { get; private set; }   // The normal of the final objects surface that the pointer collided with
-    public Vector2[] path { get; private set; }             // The set of vectors that make the pointer path
+    public List<Vector2> path { get; private set; }             // The set of vectors that make the pointer path
 
     #endregion
 
@@ -54,11 +54,11 @@ public class Pointer : MonoBehaviour
         // Send out initial ray
         ray = new Ray(transform.position, transform.right);
         hit = Physics2D.Raycast(ray.origin, ray.direction, maxLength);
-        path = new Vector2[11];
-        path[0] = ray.origin;
+        path = new List<Vector2>();
+        path.Add(ray.origin);
         int numRays = 1;
         if (hit.collider != null)
-            path[numRays] = hit.point;
+            path.Add(hit.point);
 
         // Render first line
         AddLineRender();
@@ -74,7 +74,7 @@ public class Pointer : MonoBehaviour
 
             numRays++;
             if (hit.collider != null)
-                path[numRays] = hit.point;
+                path.Add(hit.point);
 
             // Render line
             AddLineRender();
