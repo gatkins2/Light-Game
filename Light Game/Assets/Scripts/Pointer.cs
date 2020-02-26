@@ -25,6 +25,7 @@ public class Pointer : MonoBehaviour
     public Vector2 TeleportPoint { get; private set; }  // Point to teleport to
     public Transform FinalObject { get; private set; }  // Final object hit by the pointer
     public Vector2 ObjectNormal { get; private set; }   // The normal of the final objects surface that the pointer collided with
+    public Vector2[] path { get; private set; }             // The set of vectors that make the pointer path
 
     #endregion
 
@@ -53,7 +54,11 @@ public class Pointer : MonoBehaviour
         // Send out initial ray
         ray = new Ray(transform.position, transform.right);
         hit = Physics2D.Raycast(ray.origin, ray.direction, maxLength);
+        path = new Vector2[11];
+        path[0] = ray.origin;
         int numRays = 1;
+        if (hit.collider != null)
+            path[numRays] = hit.point;
 
         // Render first line
         AddLineRender();
@@ -68,6 +73,8 @@ public class Pointer : MonoBehaviour
                 PrismRefract();
 
             numRays++;
+            if (hit.collider != null)
+                path[numRays] = hit.point;
 
             // Render line
             AddLineRender();
@@ -82,7 +89,7 @@ public class Pointer : MonoBehaviour
     {
         // If no collision, in room change box, or max rays reached
         if (hit.collider == null ||
-            hit.collider.tag == "RoomChangeBox" ||
+            hit.collider.tag == "RoomChangeBox" || hit.collider.tag == "BlackHole" ||
             hit.collider.tag == "ReflectingSurface" || hit.collider.tag == "Prism")
 
             // Set teleport point to same location

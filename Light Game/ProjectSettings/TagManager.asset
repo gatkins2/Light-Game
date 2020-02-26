@@ -9,6 +9,7 @@ TagManager:
   - Prism
   - RoomChangeBox
   - RoomBounds
+  - BlackHole
   layers:
   - Default
   - TransparentFX

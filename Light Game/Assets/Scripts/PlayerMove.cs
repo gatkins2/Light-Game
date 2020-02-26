@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -37,8 +38,12 @@ public class PlayerMove : MonoBehaviour
             pointer.FinalObject.GetComponent<RoomChanger>().ChangeScene();
         }
 
+        // Restart room if black hole hit
+        else if (pointer.FinalObject != null && pointer.FinalObject.tag == "BlackHole")
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
-        else if (pointer.FinalObject.tag == "AttachableSurface")
+
+        else if (pointer.FinalObject.tag == "AttachableSurface" && pointer.TeleportPoint != (Vector2)transform.position)
         {
             // Attempt teleport
             Vector2 oldPosition = transform.position;
