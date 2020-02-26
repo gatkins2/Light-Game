@@ -307,6 +307,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRays: 10
   maxLength: 1000
+  normalPointer: {fileID: 2100000, guid: 1c32deb59eca34941907a10b7c261791, type: 2}
+  redPointer: {fileID: 2100000, guid: baebe42ca3b893b4e826d2a4868b6772, type: 2}
 --- !u!1 &4635173120742637724
 GameObject:
   m_ObjectHideFlags: 0

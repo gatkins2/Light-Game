@@ -52,6 +52,6 @@ public class PlayerMove : MonoBehaviour
         }
 
         else
-            pointer.SetColor(Color.red);
+            pointer.FlashRed();
     }
 }

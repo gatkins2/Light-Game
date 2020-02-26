@@ -10,11 +10,13 @@ public class Pointer : MonoBehaviour
     int maxRays;
     [SerializeField]
     float maxLength;
+    [SerializeField]
+    Material normalPointer, redPointer;
 
     LineRenderer lr;
     Ray ray;
     RaycastHit2D hit;
-    float t;
+    int colorFrameBuffer;
 
     #endregion
 
@@ -31,19 +33,18 @@ public class Pointer : MonoBehaviour
     {
         lr = GetComponent<LineRenderer>();
         FinalObject = null;
-        t = 1;
+        colorFrameBuffer = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        //// Update line color
-        //Color color = Color.Lerp(Color.red, Color.white, t);
-        //lr.startColor = color;
-        //lr.endColor = color;
-        //if (t < 1)
-        //    t += 1/60f;
+        // Update line color
+        if (colorFrameBuffer > 0)
+            colorFrameBuffer--;
+        else
+            lr.material = normalPointer;
 
         // Set LightRenderer initial values
         lr.positionCount = 1;
@@ -173,9 +174,10 @@ public class Pointer : MonoBehaviour
             lr.SetPosition(lr.positionCount - 1, hit.point);
     }
 
-    // Set the color of the line renderer
-    public void SetColor(Color color)
+    // Changes the pointer to red when an invalid move is attempted
+    public void FlashRed()
     {
-        t = 0;
+        lr.material = redPointer;
+        colorFrameBuffer = 60;
     }
 }
