@@ -16,12 +16,13 @@ public class Pointer : MonoBehaviour
     protected Ray ray;
     protected RaycastHit2D hit;
     protected int colorFrameBuffer;
+    protected Transform player;
 
     #endregion
 
     #region Properties
 
-    public bool Active { protected get; set; }            // Whether the pointer is shown
+    public bool Active { get; set; }            // Whether the pointer is shown
     public Vector2 TeleportPoint { get; protected set; }  // Point to teleport to
     public Transform FinalObject { get; protected set; }  // Final object hit by the pointer
     public Vector2 ObjectNormal { get; protected set; }   // The normal of the final objects surface that the pointer collided with
@@ -32,6 +33,10 @@ public class Pointer : MonoBehaviour
     // Use this for initialization
     protected void Awake()
     {
+        if (transform.parent.GetComponent<Prism>() != null)
+            player = transform.parent;
+        else
+            player = transform.parent.parent;
         lr = GetComponent<LineRenderer>();
         FinalObject = null;
         colorFrameBuffer = 0;
@@ -97,7 +102,7 @@ public class Pointer : MonoBehaviour
         else
         {
             // Set vars to default or null
-            TeleportPoint = GetComponentInParent<Transform>().GetComponentInParent<Transform>().position;
+            TeleportPoint = player.position;
             FinalObject = null;
             path = null;
 
@@ -110,12 +115,12 @@ public class Pointer : MonoBehaviour
     protected void SetTeleportPoint()
     {
         // If no collision, in room change box, or max rays reached
-        if (hit.collider == null ||
+        if (hit.collider == null || (hit.point - (Vector2)transform.position).magnitude < 0.1 ||
             hit.collider.tag == "RoomChangeBox" || hit.collider.tag == "BlackHole" ||
             hit.collider.tag == "ReflectingSurface" || hit.collider.tag == "Prism")
 
             // Set teleport point to same location
-            TeleportPoint = GetComponentInParent<Transform>().GetComponentInParent<Transform>().position;
+            TeleportPoint = player.position;
 
         // If on an attachable surface
         else if (hit.collider.tag == "AttachableSurface")

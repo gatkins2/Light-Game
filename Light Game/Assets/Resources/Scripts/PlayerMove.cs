@@ -33,7 +33,10 @@ public class PlayerMove : MonoBehaviour
                 pointer = transform.GetChild(0).transform.GetChild(0).GetComponent<Pointer>();
             // Set sprite to active
             GetComponent<SpriteRenderer>().enabled = true;
-            pointer.Active = true;
+            if (!(pointer is ColorPointer) || 
+                Camera.main.GetComponent<PlayerSelector>().activePlayer == PlayerSelector.ColorPlayer.ALL ||
+                Camera.main.GetComponent<PlayerSelector>().playerPointers[(int)Camera.main.GetComponent<PlayerSelector>().activePlayer] == pointer)
+                pointer.Active = true;
 
             // Teleport on mouse click
             if (Input.GetMouseButtonDown(0))
@@ -58,54 +61,75 @@ public class PlayerMove : MonoBehaviour
     // Teleports the player to where the pointer is pointing
     void Teleport()
     {
-        // Change rooms
-        if (pointer.FinalObject != null && pointer.FinalObject.tag == "RoomChangeBox")
+        if (pointer.Active)
         {
-            pointer.FinalObject.GetComponent<RoomChanger>().ChangeScene();
-        }
-
-        // Restart room if black hole hit
-        else if (pointer.FinalObject != null && pointer.FinalObject.tag == "BlackHole")
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
-        // Move to an attachable surface
-        else if (pointer.FinalObject != null && pointer.FinalObject.tag == "AttachableSurface" && pointer.TeleportPoint != (Vector2)transform.position)
-        {
-            // Attempt teleport
-            Vector2 oldPosition = transform.position;
-            transform.position = pointer.TeleportPoint;
-
-            // Revert position if collision is bad
-
-            // Rotate to face up from object's normal
-            transform.up = pointer.ObjectNormal;
-
-            // Set light to trail after
-            List<Vector2> lightList = pointer.path;
-            GameObject light = GameObject.Instantiate(trailingLight, lightList[0], Quaternion.identity);
-            light.GetComponent<TrailingLight>().player = this;
-            light.GetComponent<TrailingLight>().path = lightList;
-
-            // Set player to travelling
-            Enabled = false;
-
-            // Play teleport sound
-            GetComponent<AudioSource>().Play();
-        }
-
-        // Refract through a prism
-        else if (pointer.FinalObject != null && pointer.FinalObject.tag == "Prism")
-        {
-            if (!pointer.FinalObject.GetComponent<Prism>().SplitRefract())
-                pointer.ErrorFlash();
-            else
+            // Change rooms
+            if (pointer.FinalObject != null && pointer.FinalObject.tag == "RoomChangeBox")
             {
-                // Disable main player
-                Enabled = false;
+                pointer.FinalObject.GetComponent<RoomChanger>().ChangeScene();
             }
-        }
 
-        else
-            pointer.ErrorFlash();
+            // Restart room if black hole hit
+            else if (pointer.FinalObject != null && pointer.FinalObject.tag == "BlackHole")
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+            // Move to an attachable surface
+            else if (pointer.FinalObject != null && pointer.FinalObject.tag == "AttachableSurface" && pointer.TeleportPoint != (Vector2)transform.position)
+            {
+                // Attempt teleport
+                Vector2 oldPosition = transform.position;
+                transform.position = pointer.TeleportPoint;
+
+                // Revert position if collision is bad
+
+                // Rotate to face up from object's normal
+                transform.up = pointer.ObjectNormal;
+
+                // Set light to trail after
+                List<Vector2> lightList = pointer.path;
+                GameObject light = GameObject.Instantiate(trailingLight, lightList[0], Quaternion.identity);
+                light.GetComponent<TrailingLight>().player = this;
+                light.GetComponent<TrailingLight>().path = lightList;
+
+                // Set player to travelling
+                Enabled = false;
+
+                // Play teleport sound
+                GetComponent<AudioSource>().Play();
+            }
+
+            // Refract through a prism
+            else if (pointer.FinalObject != null && pointer.FinalObject.tag == "Prism")
+            {
+                // Attempt combine refract
+                if (pointer is ColorPointer)
+                {
+                    if (!pointer.FinalObject.GetComponent<Prism>().CombineRefract())
+                        pointer.ErrorFlash();
+                    else
+                    {
+                        // Destroy the colored player object
+                        Destroy(gameObject);
+                        Camera.main.GetComponent<PlayerSelector>().PlayerRefracted = false;
+                    }
+                }
+
+                // Attempt split refract
+                else
+                {
+                    if (!pointer.FinalObject.GetComponent<Prism>().SplitRefract())
+                        pointer.ErrorFlash();
+                    else
+                    {
+                        // Destroy main player object
+                        Destroy(gameObject);
+                        Camera.main.GetComponent<PlayerSelector>().PlayerRefracted = true;
+                    }
+                }
+            }
+
+            else
+                pointer.ErrorFlash();
+        }
     }
 }

@@ -6,6 +6,9 @@ public class ColorPointer : Pointer
 {
    protected override void Refract()
     {
-        return;
+        if (!hit.transform.GetComponent<Prism>().LinesToCombine.Contains(this))
+        {
+            hit.transform.GetComponent<Prism>().LinesToCombine.Add(this);
+        }
     }
 }
