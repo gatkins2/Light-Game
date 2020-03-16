@@ -34,7 +34,7 @@ public class PlayerMove : MonoBehaviour
             // Set sprite to active
             GetComponent<SpriteRenderer>().enabled = true;
             if (!(pointer is ColorPointer) || 
-                Camera.main.GetComponent<PlayerSelector>().activePlayer == PlayerSelector.ColorPlayer.ALL ||
+                Camera.main.GetComponent<PlayerSelector>().activePlayer == PlayerColor.ALL ||
                 Camera.main.GetComponent<PlayerSelector>().playerPointers[(int)Camera.main.GetComponent<PlayerSelector>().activePlayer] == pointer)
                 pointer.Active = true;
 
@@ -63,39 +63,49 @@ public class PlayerMove : MonoBehaviour
     {
         if (pointer.Active)
         {
-            // Change rooms
-            if (pointer.FinalObject != null && pointer.FinalObject.tag == "RoomChangeBox")
-            {
-                pointer.FinalObject.GetComponent<RoomChanger>().ChangeScene();
-            }
-
             // Restart room if black hole hit
-            else if (pointer.FinalObject != null && pointer.FinalObject.tag == "BlackHole")
+            if (pointer.FinalObject != null && pointer.FinalObject.tag == "BlackHole")
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
             // Move to an attachable surface
             else if (pointer.FinalObject != null && pointer.FinalObject.tag == "AttachableSurface" && pointer.TeleportPoint != (Vector2)transform.position)
             {
+                // Check if point is in a room
+                if (!Camera.main.GetComponent<RoomController>().PointInBounds(pointer.TeleportPoint))
+                    pointer.ErrorFlash();
+
                 // Attempt teleport
-                Vector2 oldPosition = transform.position;
-                transform.position = pointer.TeleportPoint;
+                else
+                {
+                    Vector2 oldPosition = transform.position;
+                    transform.position = pointer.TeleportPoint;
 
-                // Revert position if collision is bad
+                    // Rotate to face up from object's normal
+                    transform.up = pointer.ObjectNormal;
 
-                // Rotate to face up from object's normal
-                transform.up = pointer.ObjectNormal;
+                    // Set light to trail after
+                    List<Vector2> lightList = pointer.path;
+                    GameObject light = GameObject.Instantiate(trailingLight, lightList[0], Quaternion.identity);
+                    light.GetComponent<TrailingLight>().player = this;
+                    light.GetComponent<TrailingLight>().path = lightList;
 
-                // Set light to trail after
-                List<Vector2> lightList = pointer.path;
-                GameObject light = GameObject.Instantiate(trailingLight, lightList[0], Quaternion.identity);
-                light.GetComponent<TrailingLight>().player = this;
-                light.GetComponent<TrailingLight>().path = lightList;
+                    // Set player to travelling
+                    Enabled = false;
 
-                // Set player to travelling
-                Enabled = false;
-
-                // Play teleport sound
-                GetComponent<AudioSource>().Play();
+                    // Play teleport sound
+                    if (Camera.main.GetComponent<PlayerSelector>().PlayerRefracted)
+                    {
+                        bool audioPlaying = false;
+                        PlayerMove[] audioList = FindObjectsOfType<PlayerMove>();
+                        foreach (PlayerMove source in audioList)
+                            if (source.GetComponent<AudioSource>().isPlaying)
+                                audioPlaying = true;
+                        if (!audioPlaying)
+                            GetComponent<AudioSource>().Play();
+                    }
+                    else
+                        GetComponent<AudioSource>().Play();
+                }
             }
 
             // Refract through a prism
@@ -127,6 +137,10 @@ public class PlayerMove : MonoBehaviour
                     }
                 }
             }
+
+            // Hit a menu button
+            else if (pointer.FinalObject != null && pointer.FinalObject.tag == "MenuButton")
+                pointer.FinalObject.GetComponent<CustomMenuButton>().ButtonAction();
 
             else
                 pointer.ErrorFlash();

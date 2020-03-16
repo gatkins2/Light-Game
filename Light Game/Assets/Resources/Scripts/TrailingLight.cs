@@ -21,31 +21,42 @@ public class TrailingLight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (frameBuffer > 0)
+        if (!Camera.main.GetComponent<RoomController>().travelling)
         {
-            transform.position += (Vector3)direction.normalized * stepLength;
-            frameBuffer--;
-        }
-
-        else
-        {
-            // If end of path reached
-            if (path.Count <= 0)
+            if (frameBuffer > 0)
             {
-                player.Enabled = true;
-                Destroy(gameObject);
+                transform.position += (Vector3)direction.normalized * stepLength;
+                frameBuffer--;
             }
 
             else
             {
-                // Calculate next vector
-                direction = path[0] - (Vector2)transform.position;
-                path.RemoveAt(0);
-                stepLength = direction.magnitude / 10;
-                frameBuffer = 10;
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                // If end of path reached
+                if (path.Count <= 0)
+                {
+                    player.Enabled = true;
+                    Destroy(gameObject);
+                }
+
+                else
+                {
+                    // Calculate next vector
+                    direction = path[0] - (Vector2)transform.position;
+                    path.RemoveAt(0);
+                    stepLength = direction.magnitude / 10;
+                    frameBuffer = 10;
+                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                }
             }
         }
+    }
+
+    // Called when a collision occurs
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Pause on room change box
+        if (collision.gameObject.tag == "RoomChangeBox")
+            Camera.main.GetComponent<RoomController>().ChangeRoom(path[path.Count - 1]);
     }
 }

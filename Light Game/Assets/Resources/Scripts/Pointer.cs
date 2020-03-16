@@ -94,6 +94,17 @@ public class Pointer : MonoBehaviour
             if (hit.collider != null && hit.collider.tag == "Prism")
                 Refract();
 
+            // Hit menu buttons
+            else if (hit.collider != null && hit.collider.tag == "MenuButton")
+            {
+                hit.transform.GetComponent<CustomMenuButton>().Selected = true;
+                hit.transform.GetComponent<CustomMenuButton>().FrameBuffer = 1;
+            }
+
+            // Pass through room change boxes
+            else if (hit.collider != null && hit.collider.tag == "RoomChangeBox")
+                PassThroughRoomChangeBox();
+
             // Set the final teleport point
             SetTeleportPoint();
         }
@@ -134,6 +145,31 @@ public class Pointer : MonoBehaviour
         }
         else
             FinalObject = null;
+    }
+
+    // Pass a ray through a room change box
+    protected void PassThroughRoomChangeBox()
+    {
+        // Move into box
+        ray.origin = hit.point;
+        int tries = 0;
+        BoxCollider2D collider = hit.transform.GetComponent<BoxCollider2D>();
+        while (!collider.OverlapPoint(ray.origin) && tries < 1000)
+        {
+            ray.origin += ray.direction * 0.01f;
+            tries++;
+        }
+
+        // Move out of box
+        while (collider.OverlapPoint(ray.origin))
+            ray.origin += ray.direction * 0.01f;
+        path.Add(ray.origin);
+
+        // Ray continues on same trajectory
+        hit = Physics2D.Raycast(ray.origin, ray.direction, maxLength);
+        if (hit.collider != null)
+            path.Add(hit.point);
+        AddLineRender();
     }
 
     // Reflect a ray across a reflectable surface
@@ -177,6 +213,7 @@ public class Pointer : MonoBehaviour
             {
                 ray.origin += ray.direction * 0.01f;
             }
+            path.Add(ray.origin);
 
             // Render line through prism
             lr.positionCount++;

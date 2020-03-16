@@ -10,6 +10,7 @@ TagManager:
   - RoomChangeBox
   - RoomBounds
   - BlackHole
+  - MenuButton
   layers:
   - Default
   - TransparentFX
@@ -44,6 +45,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BackgroundWalls
+    uniqueID: 3807024213
+    locked: 0
+  - name: MenuButtonHighlight
+    uniqueID: 1762019583
+    locked: 0
+  - name: MenuText
+    uniqueID: 247609229
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

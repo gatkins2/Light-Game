@@ -204,7 +204,7 @@ public class Prism : MonoBehaviour
         return false;
     }
 
-    // TODO: Return colors to a single white player object
+    // Return colors to a single white player object
     public bool CombineRefract()
     {
         if (whitePlayer.GetComponent<SpriteRenderer>().enabled)
@@ -221,7 +221,7 @@ public class Prism : MonoBehaviour
             whiteLine.Active = false;
 
             // Reset first colored player selected to RED
-            Camera.main.GetComponent<PlayerSelector>().activePlayer = PlayerSelector.ColorPlayer.RED;
+            Camera.main.GetComponent<PlayerSelector>().activePlayer = PlayerColor.RED;
 
             return true;
         }

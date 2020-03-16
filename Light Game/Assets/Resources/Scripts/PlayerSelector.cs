@@ -7,20 +7,12 @@ public class PlayerSelector : MonoBehaviour
     public Pointer[] playerPointers;
     public bool PlayerRefracted { get; set; }
 
-    public enum ColorPlayer
-    {
-        RED = 0,
-        YELLOW = 1,
-        GREEN = 2,
-        BLUE = 3,
-        ALL = 4
-    }
-    public ColorPlayer activePlayer { get; set; }
+    public PlayerColor activePlayer { get; set; }
 
     // Start is called before the first frame update
     void Start()
     {
-        activePlayer = ColorPlayer.RED;
+        activePlayer = PlayerColor.RED;
         PlayerRefracted = false;
     }
 
@@ -32,25 +24,46 @@ public class PlayerSelector : MonoBehaviour
         {
             switch (activePlayer)
             {
-                case ColorPlayer.RED:
-                case ColorPlayer.YELLOW:
-                case ColorPlayer.GREEN:
+                case PlayerColor.RED:
+                case PlayerColor.YELLOW:
+                case PlayerColor.GREEN:
                     playerPointers[(int)activePlayer].Active = false;
                     activePlayer += 1;
                     playerPointers[(int)activePlayer].Active = true;
                     break;
-                case ColorPlayer.BLUE:
-                    activePlayer += 1;
-                    foreach (Pointer pointer in playerPointers)
-                        pointer.Active = true;
+                case PlayerColor.BLUE:
+
+                    // If all colored players in the same room
+                    RoomController rc = Camera.main.GetComponent<RoomController>();
+                    if (rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[1].gameObject) &&
+                        rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[2].gameObject) &&
+                        rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[3].gameObject))
+                    {
+                        activePlayer = PlayerColor.ALL;
+                        foreach (Pointer pointer in playerPointers)
+                            pointer.Active = true;
+                    }
+
+                    // Otherwise, skip to red
+                    else
+                    {
+                        playerPointers[(int)activePlayer].Active = false;
+                        activePlayer = PlayerColor.RED;
+                        playerPointers[(int)activePlayer].Active = true;
+                    }
+
                     break;
-                case ColorPlayer.ALL:
-                    activePlayer = ColorPlayer.RED;
+                case PlayerColor.ALL:
+                    activePlayer = PlayerColor.RED;
                     foreach (Pointer pointer in playerPointers)
                         pointer.Active = false;
                     playerPointers[(int)activePlayer].Active = true;
                     break;
             }
+
+            // Move camera to active player
+            if (activePlayer != PlayerColor.ALL)
+                GetComponent<RoomController>().ChangeRoom(playerPointers[(int)activePlayer].transform.position);
         }
     }
 }
