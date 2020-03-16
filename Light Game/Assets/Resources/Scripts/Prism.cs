@@ -189,6 +189,7 @@ public class Prism : MonoBehaviour
                 colorPointer.GetComponent<ColorPointer>().normalPointer = lines[i].GetComponent<LineRenderer>().material;
                 colorPointer.GetComponent<ColorPointer>().maxRays = 10;
                 colorPointer.GetComponent<ColorPointer>().maxLength = 1000;
+                colorPointer.GetComponent<ColorPointer>().color = (PlayerColor)i;
                 Camera.main.GetComponent<PlayerSelector>().playerPointers[i] = colorPointer.GetComponent<ColorPointer>();
                 if (i != 0)
                     colorPointer.GetComponent<ColorPointer>().Active = false;
@@ -216,6 +217,7 @@ public class Prism : MonoBehaviour
 
             // Create player object at image
             GameObject newPlayer = GameObject.Instantiate(player, whitePlayer.transform.position, whitePlayer.rotation);
+            newPlayer.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Pointer>().color = PlayerColor.WHITE;
 
             // Disable white line
             whiteLine.Active = false;

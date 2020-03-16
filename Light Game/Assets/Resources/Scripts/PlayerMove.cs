@@ -14,6 +14,7 @@ public class PlayerMove : MonoBehaviour
 
     public bool Enabled { private get; set; }   // Whether player sprite and pointer are active
     public Pointer pointer { private get; set; }
+    public PlayerColor color { get; set; }
 
 	// Use this for initialization
 	void Start ()
@@ -68,7 +69,8 @@ public class PlayerMove : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
             // Move to an attachable surface
-            else if (pointer.FinalObject != null && pointer.FinalObject.tag == "AttachableSurface" && pointer.TeleportPoint != (Vector2)transform.position)
+            else if (pointer.FinalObject != null && (pointer.FinalObject.tag == "AttachableSurface" || pointer.FinalObject.tag == "Window") && 
+                pointer.TeleportPoint != (Vector2)transform.position)
             {
                 // Check if point is in a room
                 if (!Camera.main.GetComponent<RoomController>().PointInBounds(pointer.TeleportPoint))

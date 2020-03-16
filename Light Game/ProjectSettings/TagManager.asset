@@ -11,6 +11,7 @@ TagManager:
   - RoomBounds
   - BlackHole
   - MenuButton
+  - Window
   layers:
   - Default
   - TransparentFX

@@ -11,33 +11,33 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Resources/Scenes/Gameplay.unity
     guid: e3b2243e58cedc540861c7e38355dcd5
-  - enabled: 1
-    path: Assets/Resources/Scenes/Room 1-2.unity
-    guid: 94e1965e7500c0a41b2d4171bded13a8
-  - enabled: 1
-    path: Assets/Resources/Scenes/Room 1-3.unity
-    guid: 4f9d890ea54de23469013582bc297f7b
-  - enabled: 1
-    path: Assets/Resources/Scenes/Room 1-4.unity
-    guid: 8fedabbc016c61f4eaae98f619190254
-  - enabled: 1
-    path: Assets/Resources/Scenes/Room 1-5.unity
-    guid: e1a630af3f0c5ba43af4bbb4f43726fc
-  - enabled: 1
-    path: Assets/Resources/Scenes/Room 2-1.unity
-    guid: 06d8e596bcd6be04db05ba3e0b4b28bd
-  - enabled: 1
-    path: Assets/Resources/Scenes/Room 2-2.unity
-    guid: 9a0a4984a1da37842bfcf447775f514b
-  - enabled: 1
-    path: Assets/Resources/Scenes/Room 2-3.unity
-    guid: 477843fc59412554f886d8b0aed0dfe2
-  - enabled: 1
-    path: Assets/Resources/Scenes/Room 2-4.unity
-    guid: ce14271c8868a20438933ac128d39c4e
-  - enabled: 1
-    path: Assets/Resources/Scenes/Room 2-5.unity
-    guid: bf94fb1e43cd7dc4ea1a201f0026eec3
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000

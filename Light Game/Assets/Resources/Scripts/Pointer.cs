@@ -27,6 +27,7 @@ public class Pointer : MonoBehaviour
     public Transform FinalObject { get; protected set; }  // Final object hit by the pointer
     public Vector2 ObjectNormal { get; protected set; }   // The normal of the final objects surface that the pointer collided with
     public List<Vector2> path { get; protected set; }     // The set of vectors that make the pointer path
+    public PlayerColor color;                             // The color of the pointer
 
     #endregion
 
@@ -75,19 +76,27 @@ public class Pointer : MonoBehaviour
             // Render first line
             AddLineRender();
 
-            // While reflecting
-            while (hit.collider != null && (hit.collider.tag == "ReflectingSurface") && numRays < maxRays)
+            // While reflecting or passing through objects
+            while (hit.collider != null && 
+                (hit.collider.tag == "ReflectingSurface" || hit.collider.tag == "RoomChangeBox" || (hit.collider.tag == "Window" && hit.transform.GetComponent<Window>().windowColor == color)) && 
+                numRays < maxRays)
             {
+                // Pass through room change boxes and windows
+                if (hit.collider.tag == "RoomChangeBox" || (hit.collider.tag == "Window" && hit.transform.GetComponent<Window>().windowColor == color))
+                    PassThrough();
+
                 // Find next point
-                if (hit.collider.tag == "ReflectingSurface")
+                else if (hit.collider.tag == "ReflectingSurface")
+                {
                     Reflect();
 
-                numRays++;
-                if (hit.collider != null)
-                    path.Add(hit.point);
+                    numRays++;
+                    if (hit.collider != null)
+                        path.Add(hit.point);
 
-                // Render line
-                AddLineRender();
+                    // Render line
+                    AddLineRender();
+                }
             }
 
             // Refract on prisms
@@ -100,10 +109,6 @@ public class Pointer : MonoBehaviour
                 hit.transform.GetComponent<CustomMenuButton>().Selected = true;
                 hit.transform.GetComponent<CustomMenuButton>().FrameBuffer = 1;
             }
-
-            // Pass through room change boxes
-            else if (hit.collider != null && hit.collider.tag == "RoomChangeBox")
-                PassThroughRoomChangeBox();
 
             // Set the final teleport point
             SetTeleportPoint();
@@ -134,7 +139,7 @@ public class Pointer : MonoBehaviour
             TeleportPoint = player.position;
 
         // If on an attachable surface
-        else if (hit.collider.tag == "AttachableSurface")
+        else if (hit.collider.tag == "AttachableSurface" || hit.collider.tag == "Window")
             TeleportPoint = hit.point;
 
         // Set final object
@@ -148,7 +153,7 @@ public class Pointer : MonoBehaviour
     }
 
     // Pass a ray through a room change box
-    protected void PassThroughRoomChangeBox()
+    protected void PassThrough()
     {
         // Move into box
         ray.origin = hit.point;

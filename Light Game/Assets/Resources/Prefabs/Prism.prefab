@@ -153,6 +153,7 @@ MonoBehaviour:
   maxLength: 1000
   normalPointer: {fileID: 2100000, guid: 1c32deb59eca34941907a10b7c261791, type: 2}
   errorPointer: {fileID: 2100000, guid: baebe42ca3b893b4e826d2a4868b6772, type: 2}
+  color: 4
 --- !u!1 &703298893545030912
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,6 +697,7 @@ MonoBehaviour:
   maxLength: 1000
   normalPointer: {fileID: 2100000, guid: c72af64de9910ae4683c2b21e615b7c0, type: 2}
   errorPointer: {fileID: 2100000, guid: baebe42ca3b893b4e826d2a4868b6772, type: 2}
+  color: 2
 --- !u!1 &4233702519700758749
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,6 +933,7 @@ MonoBehaviour:
   maxLength: 1000
   normalPointer: {fileID: 2100000, guid: baebe42ca3b893b4e826d2a4868b6772, type: 2}
   errorPointer: {fileID: 2100000, guid: baebe42ca3b893b4e826d2a4868b6772, type: 2}
+  color: 0
 --- !u!1 &6675604906651613192
 GameObject:
   m_ObjectHideFlags: 0
@@ -1084,6 +1087,7 @@ MonoBehaviour:
   maxLength: 1000
   normalPointer: {fileID: 2100000, guid: 3a253351a37b6b54b92af00f8f1297b7, type: 2}
   errorPointer: {fileID: 2100000, guid: baebe42ca3b893b4e826d2a4868b6772, type: 2}
+  color: 1
 --- !u!1 &7318283044086937329
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,6 +1241,7 @@ MonoBehaviour:
   maxLength: 1000
   normalPointer: {fileID: 2100000, guid: 3d50f892ae9af844f84106eb83380e72, type: 2}
   errorPointer: {fileID: 2100000, guid: baebe42ca3b893b4e826d2a4868b6772, type: 2}
+  color: 3
 --- !u!1 &7350188763195525926
 GameObject:
   m_ObjectHideFlags: 0
