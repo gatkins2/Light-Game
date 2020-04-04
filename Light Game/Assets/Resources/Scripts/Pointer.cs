@@ -22,7 +22,7 @@ public class Pointer : MonoBehaviour
 
     #region Properties
 
-    public bool Active { get; set; }            // Whether the pointer is shown
+    public bool Active { get; set; }                      // Whether the pointer is shown
     public Vector2 TeleportPoint { get; protected set; }  // Point to teleport to
     public Transform FinalObject { get; protected set; }  // Final object hit by the pointer
     public Vector2 ObjectNormal { get; protected set; }   // The normal of the final objects surface that the pointer collided with
@@ -78,14 +78,19 @@ public class Pointer : MonoBehaviour
 
             // While reflecting or passing through objects
             while (hit.collider != null && 
-                (hit.collider.tag == "ReflectingSurface" || hit.collider.tag == "RoomChangeBox" || (hit.collider.tag == "Window" && hit.transform.GetComponent<Window>().windowColor == color)) && 
-                numRays < maxRays)
+                (hit.collider.tag == "ReflectingSurface" || hit.collider.tag == "RoomChangeBox" || hit.collider.tag == "BlackHole" ||
+                (hit.collider.tag == "Window" && hit.transform.GetComponent<Window>().windowColor == color)
+                ) && numRays < maxRays)
             {
                 // Pass through room change boxes and windows
                 if (hit.collider.tag == "RoomChangeBox" || (hit.collider.tag == "Window" && hit.transform.GetComponent<Window>().windowColor == color))
                     PassThrough();
 
-                // Find next point
+                // Warp through black holes
+                if (hit.collider.tag == "BlackHole")
+                    BlackHoleWarp();
+
+                // Reflect off of mirrors
                 else if (hit.collider.tag == "ReflectingSurface")
                 {
                     Reflect();
@@ -173,6 +178,43 @@ public class Pointer : MonoBehaviour
         // Ray continues on same trajectory
         hit = Physics2D.Raycast(ray.origin, ray.direction, maxLength);
         if (hit.collider != null)
+            path.Add(hit.point);
+        AddLineRender();
+    }
+
+    // Warp a ray through a black hole
+    protected void BlackHoleWarp()
+    {
+        // Get direction from center of first black hole to the hit point
+        Vector2 directionFromCenter = (hit.point - (Vector2)hit.transform.position).normalized;
+
+        // Get the point on the edge of the 2nd black hole in the same direction
+        GameObject exitBlackHole = hit.transform.GetComponent<BlackHole>().BlackHoleExit;
+        CircleCollider2D collider = exitBlackHole.GetComponent<CircleCollider2D>();
+        Vector2 edgePoint = (Vector2)exitBlackHole.transform.position + (directionFromCenter * collider.radius);
+
+        // Move into black hole
+        ray.origin = edgePoint;
+        int tries = 0;
+        while (!collider.OverlapPoint(ray.origin) && tries < 1000)
+        {
+            ray.origin -= (Vector3)(directionFromCenter * 0.01f);
+            tries++;
+        }
+
+        // Move out of black hole
+        while (collider.OverlapPoint(ray.origin))
+            ray.origin += ray.direction * 0.01f;
+        path.Add(ray.origin);
+
+        // Add a line renderer
+        LineRenderer newLR = gameObject.AddComponent<LineRenderer>();
+        newLR.positionCount = 1;
+        newLR.SetPosition(0, ray.origin);
+
+        // Ray continues on same trajectory
+        hit = Physics2D.Raycast(ray.origin, ray.direction, maxLength);
+        if (collider != null)
             path.Add(hit.point);
         AddLineRender();
     }
