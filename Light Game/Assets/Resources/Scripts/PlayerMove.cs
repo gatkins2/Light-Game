@@ -10,18 +10,18 @@ public class PlayerMove : MonoBehaviour
     [SerializeField]
     Sprite emptySprite;
 
-    Sprite defaultSprite;
-
     public bool Enabled { private get; set; }   // Whether player sprite and pointer are active
     public Pointer pointer { private get; set; }
     public PlayerColor color { get; set; }
+
+    Vector2 lastPosition;
 
 	// Use this for initialization
 	void Start ()
     {
         pointer = transform.GetChild(0).transform.GetChild(0).GetComponent<Pointer>();
-        defaultSprite = GetComponent<SpriteRenderer>().sprite;
         Enabled = true;
+        lastPosition = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -54,9 +54,13 @@ public class PlayerMove : MonoBehaviour
     }
 
     // Called on collision
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.gameObject.layer == GameConstants.ObstructionLayerIndex)
+        {
+            transform.position = lastPosition;
+            pointer.ErrorFlash();
+        }
     }
     
     // Teleports the player to where the pointer is pointing
@@ -75,11 +79,14 @@ public class PlayerMove : MonoBehaviour
                 // Attempt teleport
                 else
                 {
-                    Vector2 oldPosition = transform.position;
+                    lastPosition = transform.position;
                     transform.position = pointer.TeleportPoint;
 
                     // Rotate to face up from object's normal
                     transform.up = pointer.ObjectNormal;
+                    transform.position += transform.up * 0.01f;
+
+                    // If in collision, return to previous location and flash error pointer
 
                     // Set light to trail after
                     List<Vector2> lightList = pointer.path;

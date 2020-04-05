@@ -43,7 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2259945609192772271}
   - component: {fileID: 2259945609192772270}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WallGrid
   m_TagString: AttachableSurface
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 2259945609863241619}
   - component: {fileID: 2259945609863241616}
   - component: {fileID: 2259945609863241612}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Walls
   m_TagString: AttachableSurface
   m_Icon: {fileID: 0}

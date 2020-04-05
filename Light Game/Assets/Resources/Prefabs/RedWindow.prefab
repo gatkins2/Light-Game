@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8426694897918038806}
   - component: {fileID: 7395130708204698737}
   - component: {fileID: -4370830943319669428}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RedWindow
   m_TagString: Window
   m_Icon: {fileID: 0}

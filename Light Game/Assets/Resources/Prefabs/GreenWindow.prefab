@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8426694897918038806}
   - component: {fileID: 8816292479799907063}
   - component: {fileID: 7949972383163876481}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GreenWindow
   m_TagString: Window
   m_Icon: {fileID: 0}
