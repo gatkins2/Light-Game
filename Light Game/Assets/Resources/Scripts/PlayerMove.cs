@@ -14,14 +14,11 @@ public class PlayerMove : MonoBehaviour
     public Pointer pointer { private get; set; }
     public PlayerColor color { get; set; }
 
-    Vector2 lastPosition;
-
 	// Use this for initialization
 	void Start ()
     {
         pointer = transform.GetChild(0).transform.GetChild(0).GetComponent<Pointer>();
         Enabled = true;
-        lastPosition = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -52,16 +49,6 @@ public class PlayerMove : MonoBehaviour
             pointer.Active = false;
         }
     }
-
-    // Called on collision
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == GameConstants.ObstructionLayerIndex)
-        {
-            transform.position = lastPosition;
-            pointer.ErrorFlash();
-        }
-    }
     
     // Teleports the player to where the pointer is pointing
     void Teleport()
@@ -79,7 +66,8 @@ public class PlayerMove : MonoBehaviour
                 // Attempt teleport
                 else
                 {
-                    lastPosition = transform.position;
+                    Vector2 lastPosition = transform.position;
+                    Vector3 lastOrientation = transform.up;
                     transform.position = pointer.TeleportPoint;
 
                     // Rotate to face up from object's normal
@@ -87,29 +75,44 @@ public class PlayerMove : MonoBehaviour
                     transform.position += transform.up * 0.01f;
 
                     // If in collision, return to previous location and flash error pointer
-
-                    // Set light to trail after
-                    List<Vector2> lightList = pointer.path;
-                    GameObject light = GameObject.Instantiate(trailingLight, lightList[0], Quaternion.identity);
-                    light.GetComponent<TrailingLight>().player = this;
-                    light.GetComponent<TrailingLight>().path = lightList;
-
-                    // Set player to travelling
-                    Enabled = false;
-
-                    // Play teleport sound
-                    if (Camera.main.GetComponent<PlayerSelector>().PlayerRefracted)
+                    float halfWidth = GetComponent<BoxCollider2D>().size.x / 2;
+                    float halfHeight = GetComponent<BoxCollider2D>().size.y / 2;
+                    Vector2 startPoint = transform.position + (transform.up * halfHeight);
+                    RaycastHit2D hit = Physics2D.Raycast(startPoint, transform.right, halfWidth);
+                    RaycastHit2D hit2 = Physics2D.Raycast(startPoint, -transform.right, halfWidth);
+                    RaycastHit2D hit3 = Physics2D.Raycast(startPoint, transform.up, halfHeight);
+                    if (hit.collider != null || hit2.collider != null || hit3.collider != null)
                     {
-                        bool audioPlaying = false;
-                        PlayerMove[] audioList = FindObjectsOfType<PlayerMove>();
-                        foreach (PlayerMove source in audioList)
-                            if (source.GetComponent<AudioSource>().isPlaying)
-                                audioPlaying = true;
-                        if (!audioPlaying)
+                        transform.position = lastPosition;
+                        transform.up = lastOrientation;
+                        pointer.ErrorFlash();
+                    }
+
+                    else
+                    {
+                        // Set light to trail after
+                        List<Vector2> lightList = pointer.path;
+                        GameObject light = GameObject.Instantiate(trailingLight, lightList[0], Quaternion.identity);
+                        light.GetComponent<TrailingLight>().player = this;
+                        light.GetComponent<TrailingLight>().path = lightList;
+
+                        // Set player to travelling
+                        Enabled = false;
+
+                        // Play teleport sound
+                        if (Camera.main.GetComponent<PlayerSelector>().PlayerRefracted)
+                        {
+                            bool audioPlaying = false;
+                            PlayerMove[] audioList = FindObjectsOfType<PlayerMove>();
+                            foreach (PlayerMove source in audioList)
+                                if (source.GetComponent<AudioSource>().isPlaying)
+                                    audioPlaying = true;
+                            if (!audioPlaying)
+                                GetComponent<AudioSource>().Play();
+                        }
+                        else
                             GetComponent<AudioSource>().Play();
                     }
-                    else
-                        GetComponent<AudioSource>().Play();
                 }
             }
 

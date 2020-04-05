@@ -55,8 +55,8 @@ public class TrailingLight : MonoBehaviour
                     // Calculate next vector
                     direction = path[0] - (Vector2)transform.position;
                     path.RemoveAt(0);
-                    stepLength = direction.magnitude / 60;
-                    frameBuffer = 60;
+                    stepLength = direction.magnitude / 20;
+                    frameBuffer = 20;
                     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
                 }
