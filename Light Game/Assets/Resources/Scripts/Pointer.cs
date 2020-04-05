@@ -104,7 +104,15 @@ public class Pointer : MonoBehaviour
 
             // Warp through black holes
             if (hit.collider != null && hit.collider.tag == "BlackHole")
+            {
                 BlackHoleWarp();
+
+                // Combine paths
+                List<Vector2> path2 = hit.transform.GetComponent<BlackHole>().BlackHoleExit.transform.GetChild(1).GetComponent<Pointer>().path;
+                if (path2 != null && path != path2)
+                    foreach (Vector2 item in path2)
+                        path.Add(item);
+            }
 
             // Refract on prisms
             else if (hit.collider != null && hit.collider.tag == "Prism")
@@ -198,10 +206,17 @@ public class Pointer : MonoBehaviour
         // Get direction from center of first black hole to the hit point
         Vector2 directionFromCenter = (hit.point - (Vector2)hit.transform.position).normalized;
 
+        // Add black hole center and blank value to path
+        path.Add((Vector2)hit.transform.position);
+        path.Add(new Vector2(float.NaN, float.NaN));
+
         // Get the point on the edge of the 2nd black hole in the same direction
         GameObject exitBlackHole = hit.transform.GetComponent<BlackHole>().BlackHoleExit;
         CircleCollider2D collider = exitBlackHole.GetComponent<CircleCollider2D>();
         Vector2 edgePoint = (Vector2)exitBlackHole.transform.position + directionFromCenter;
+
+        // Add second black hole center to path
+        path.Add(exitBlackHole.transform.position);
 
         // Move into black hole
         ray.origin = edgePoint;
@@ -215,7 +230,6 @@ public class Pointer : MonoBehaviour
         // Move out of black hole
         while (collider.OverlapPoint(ray.origin))
             ray.origin += ray.direction * 0.01f;
-        path.Add(ray.origin);
 
         // Activate black hole
         BlackHole bhScript = exitBlackHole.GetComponent<BlackHole>();

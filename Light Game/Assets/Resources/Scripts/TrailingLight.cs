@@ -40,11 +40,23 @@ public class TrailingLight : MonoBehaviour
 
                 else
                 {
+                    // If vector contains NaN
+                    if (float.IsNaN(path[0].x) && float.IsNaN(path[0].y))
+                    {
+                        // Remove empty point and teleport
+                        path.RemoveAt(0);
+                        if (path.Count > 0)
+                        {
+                            transform.position = path[0];
+                            path.RemoveAt(0);
+                        }
+                    }
+
                     // Calculate next vector
                     direction = path[0] - (Vector2)transform.position;
                     path.RemoveAt(0);
-                    stepLength = direction.magnitude / 10;
-                    frameBuffer = 10;
+                    stepLength = direction.magnitude / 60;
+                    frameBuffer = 60;
                     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
                 }
