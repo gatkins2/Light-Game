@@ -34,8 +34,10 @@ public class Pointer : MonoBehaviour
     // Use this for initialization
     protected void Awake()
     {
-        if (transform.parent.GetComponent<Prism>() != null)
+        if (transform.parent.GetComponent<Prism>() != null ||
+            transform.parent.GetComponent<BlackHole>() != null)
             player = transform.parent;
+        
         else
             player = transform.parent.parent;
         lr = GetComponent<LineRenderer>();
@@ -78,17 +80,13 @@ public class Pointer : MonoBehaviour
 
             // While reflecting or passing through objects
             while (hit.collider != null && 
-                (hit.collider.tag == "ReflectingSurface" || hit.collider.tag == "RoomChangeBox" || hit.collider.tag == "BlackHole" ||
+                (hit.collider.tag == "ReflectingSurface" || hit.collider.tag == "RoomChangeBox" ||
                 (hit.collider.tag == "Window" && hit.transform.GetComponent<Window>().windowColor == color)
                 ) && numRays < maxRays)
             {
                 // Pass through room change boxes and windows
                 if (hit.collider.tag == "RoomChangeBox" || (hit.collider.tag == "Window" && hit.transform.GetComponent<Window>().windowColor == color))
                     PassThrough();
-
-                // Warp through black holes
-                if (hit.collider.tag == "BlackHole")
-                    BlackHoleWarp();
 
                 // Reflect off of mirrors
                 else if (hit.collider.tag == "ReflectingSurface")
@@ -104,8 +102,12 @@ public class Pointer : MonoBehaviour
                 }
             }
 
+            // Warp through black holes
+            if (hit.collider != null && hit.collider.tag == "BlackHole")
+                BlackHoleWarp();
+
             // Refract on prisms
-            if (hit.collider != null && hit.collider.tag == "Prism")
+            else if (hit.collider != null && hit.collider.tag == "Prism")
                 Refract();
 
             // Hit menu buttons
@@ -137,8 +139,7 @@ public class Pointer : MonoBehaviour
     {
         // If no collision, in room change box, or max rays reached
         if (hit.collider == null || (hit.point - (Vector2)transform.position).magnitude < 0.1 ||
-            hit.collider.tag == "RoomChangeBox" || hit.collider.tag == "BlackHole" ||
-            hit.collider.tag == "ReflectingSurface" || hit.collider.tag == "Prism")
+            hit.collider.tag == "RoomChangeBox" || hit.collider.tag == "ReflectingSurface" || hit.collider.tag == "Prism")
 
             // Set teleport point to same location
             TeleportPoint = player.position;
@@ -147,13 +148,22 @@ public class Pointer : MonoBehaviour
         else if (hit.collider.tag == "AttachableSurface" || hit.collider.tag == "Window")
             TeleportPoint = hit.point;
 
+        // If on a black hole
+        else if (hit.collider.tag == "BlackHole")
+        {
+            Pointer exitPointer = hit.transform.GetComponent<BlackHole>().BlackHoleExit.GetComponent<BlackHole>().Pointer;
+            TeleportPoint = exitPointer.TeleportPoint;
+            FinalObject = exitPointer.FinalObject;
+            ObjectNormal = exitPointer.ObjectNormal;
+        }
+
         // Set final object
-        if (hit.collider != null)
+        if (hit.collider != null && hit.collider.tag != "BlackHole")
         {
             FinalObject = hit.transform;
             ObjectNormal = hit.normal;
         }
-        else
+        else if (hit.collider.tag != "BlackHole")
             FinalObject = null;
     }
 
@@ -191,7 +201,7 @@ public class Pointer : MonoBehaviour
         // Get the point on the edge of the 2nd black hole in the same direction
         GameObject exitBlackHole = hit.transform.GetComponent<BlackHole>().BlackHoleExit;
         CircleCollider2D collider = exitBlackHole.GetComponent<CircleCollider2D>();
-        Vector2 edgePoint = (Vector2)exitBlackHole.transform.position + (directionFromCenter * collider.radius);
+        Vector2 edgePoint = (Vector2)exitBlackHole.transform.position + directionFromCenter;
 
         // Move into black hole
         ray.origin = edgePoint;
@@ -207,16 +217,16 @@ public class Pointer : MonoBehaviour
             ray.origin += ray.direction * 0.01f;
         path.Add(ray.origin);
 
-        // Add a line renderer
-        LineRenderer newLR = gameObject.AddComponent<LineRenderer>();
-        newLR.positionCount = 1;
-        newLR.SetPosition(0, ray.origin);
+        // Activate black hole
+        BlackHole bhScript = exitBlackHole.GetComponent<BlackHole>();
+        bhScript.Active = true;
+        bhScript.FrameBuffer = 1;
 
-        // Ray continues on same trajectory
-        hit = Physics2D.Raycast(ray.origin, ray.direction, maxLength);
-        if (collider != null)
-            path.Add(hit.point);
-        AddLineRender();
+        // Set exit pointer
+        Pointer exitPointer = bhScript.Pointer;
+        exitPointer.SetStartPoint(ray.origin);
+        exitPointer.SetStartDirection(ray.direction);
+        exitPointer.normalPointer = normalPointer;
     }
 
     // Reflect a ray across a reflectable surface
@@ -303,5 +313,11 @@ public class Pointer : MonoBehaviour
     public void SetStartPoint(Vector2 point)
     {
         transform.position = point;
+    }
+
+    // Set the start direction of the line renderer
+    public void SetStartDirection(Vector2 direction)
+    {
+        transform.right = direction;
     }
 }

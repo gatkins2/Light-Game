@@ -64,12 +64,8 @@ public class PlayerMove : MonoBehaviour
     {
         if (pointer.Active)
         {
-            // Restart room if black hole hit
-            if (pointer.FinalObject != null && pointer.FinalObject.tag == "BlackHole")
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
             // Move to an attachable surface
-            else if (pointer.FinalObject != null && (pointer.FinalObject.tag == "AttachableSurface" || pointer.FinalObject.tag == "Window") && 
+            if (pointer.FinalObject != null && (pointer.FinalObject.tag == "AttachableSurface" || pointer.FinalObject.tag == "Window") && 
                 pointer.TeleportPoint != (Vector2)transform.position)
             {
                 // Check if point is in a room
@@ -145,7 +141,9 @@ public class PlayerMove : MonoBehaviour
                 pointer.FinalObject.GetComponent<CustomMenuButton>().ButtonAction();
 
             else
+            {
                 pointer.ErrorFlash();
+            }
         }
     }
 }
