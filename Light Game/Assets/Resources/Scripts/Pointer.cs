@@ -51,6 +51,10 @@ public class Pointer : MonoBehaviour
     // Update is called once per frame
     protected void Update()
     {
+        // Deactivate if game is paused
+        if (PauseMenu.GameIsPaused)
+            Active = false;
+
         if (Active)
         {
             // Enable line renderer
