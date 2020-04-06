@@ -65,4 +65,18 @@ public class RoomController : MonoBehaviour
 
         return room;
     }
+
+    // Return the room a point is in
+    public GameObject GetRoomFromPoint(Vector2 point)
+    {
+        GameObject room = null;
+        for (int i = 0; i < roomList.Length; i++)
+            if (roomList[i].GetComponent<BoxCollider2D>().OverlapPoint(point))
+            {
+                room = roomList[i];
+                break;
+            }
+
+        return room;
+    }
 }

@@ -6,6 +6,7 @@ public class TrailingLight : MonoBehaviour
 {
     Vector2 direction;
     float stepLength;
+    RoomController roomController;
 
     public List<Vector2> path { private get; set; }
     public PlayerMove player { private get; set; }
@@ -19,12 +20,13 @@ public class TrailingLight : MonoBehaviour
         direction = path[0] - (Vector2)transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        roomController = Camera.main.GetComponent<RoomController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!Camera.main.GetComponent<RoomController>().travelling)
+        if (!roomController.travelling)
         {
             // If path point reached
             if (((Vector2)transform.position - path[0]).magnitude <= (GameConstants.TrailingLightMoveSpeed * Time.deltaTime))
@@ -50,6 +52,7 @@ public class TrailingLight : MonoBehaviour
                         if (path.Count > 0)
                         {
                             transform.position = path[0];
+                            GetComponent<TrailRenderer>().Clear();
                             path.RemoveAt(0);
                         }
                     }
@@ -73,5 +76,16 @@ public class TrailingLight : MonoBehaviour
         // Pause on room change box
         if (collision.gameObject.tag == "RoomChangeBox")
             Camera.main.GetComponent<RoomController>().ChangeRoom(path[path.Count - 1]);
+
+        // Pause on black hole into another room
+        else if (collision.gameObject.tag == "BlackHole")
+        {
+            // If camera not in the same room
+            if (roomController.GetRoomFromPoint(Camera.main.transform.position) != roomController.GetRoomFromPoint(transform.position))
+            {
+                // Change to new room
+                roomController.ChangeRoom(transform.position);
+            }
+        }
     }
 }
