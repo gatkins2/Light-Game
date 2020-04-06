@@ -18,6 +18,8 @@ public class Prism : MonoBehaviour
     Transform redPlayer, yellowPlayer, greenPlayer, bluePlayer, whitePlayer;     // Colored player images
     Transform[] playerImages;
 
+    Material[] colorPointerMaterials;                               // Array of materials to give color players
+
     bool validRefract;                                              // Whether the player is able to refract
 
     public List<ColorPointer> LinesToCombine;                       // List of colored lines to comine on combine refract
@@ -27,6 +29,13 @@ public class Prism : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Set color pointer materials
+        colorPointerMaterials = new Material[4];
+        colorPointerMaterials[0] = (Material)Resources.Load("Materials/RedLight");
+        colorPointerMaterials[1] = (Material)Resources.Load("Materials/YellowLight");
+        colorPointerMaterials[2] = (Material)Resources.Load("Materials/GreenLight");
+        colorPointerMaterials[3] = (Material)Resources.Load("Materials/BlueLight");
+
         // Get color pointers
         redLine = transform.GetChild(0).GetComponent<ColorPointer>();
         yellowLine = transform.GetChild(1).GetComponent<ColorPointer>();
@@ -186,7 +195,8 @@ public class Prism : MonoBehaviour
                 Destroy(colorPointer.GetComponent<Pointer>());
                 colorPlayer.GetComponent<PlayerMove>().pointer = colorPointer.AddComponent<ColorPointer>();
                 colorPlayer.GetComponent<SpriteRenderer>().color = playerImages[i].GetComponent<SpriteRenderer>().color;
-                colorPointer.GetComponent<ColorPointer>().normalPointer = lines[i].GetComponent<LineRenderer>().material;
+                colorPointer.GetComponent<ColorPointer>().normalPointer = colorPointerMaterials[i];
+                colorPointer.GetComponent<ColorPointer>().errorPointer = (Material)Resources.Load("Materials/ErrorLight");
                 colorPointer.GetComponent<ColorPointer>().maxRays = 10;
                 colorPointer.GetComponent<ColorPointer>().maxLength = 1000;
                 colorPointer.GetComponent<ColorPointer>().color = (PlayerColor)i;

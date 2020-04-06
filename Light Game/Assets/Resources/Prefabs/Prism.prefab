@@ -50,7 +50,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1c32deb59eca34941907a10b7c261791, type: 2}
+  - {fileID: 2100000, guid: 02cb17a85738d7c42a76573a2dc757ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRays: 10
   maxLength: 1000
-  normalPointer: {fileID: 2100000, guid: 1c32deb59eca34941907a10b7c261791, type: 2}
+  normalPointer: {fileID: 0}
   errorPointer: {fileID: 2100000, guid: baebe42ca3b893b4e826d2a4868b6772, type: 2}
   color: 4
 --- !u!1 &703298893545030912

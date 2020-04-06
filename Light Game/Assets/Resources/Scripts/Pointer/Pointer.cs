@@ -44,8 +44,6 @@ public class Pointer : MonoBehaviour
         FinalObject = null;
         colorFrameBuffer = 0;
         Active = true;
-        normalPointer = lr.material;
-        errorPointer = Resources.Load<Material>("Materials/RedLight");
     }
 
     // Update is called once per frame
