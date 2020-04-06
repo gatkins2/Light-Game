@@ -9,24 +9,26 @@ public class PlayerSelector : MonoBehaviour
 
     public PlayerColor activePlayer { get; set; }
 
+    RoomController rc;
+
     // Start is called before the first frame update
     void Start()
     {
         activePlayer = PlayerColor.RED;
         PlayerRefracted = false;
+        rc = GetComponent<RoomController>();
     }
 
     // Update is called once per frame
     void Update()
     {
         // Move to player room if not in it
-        if (!PlayerRefracted)
-        {
-            RoomController rc = GetComponent<RoomController>();
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (rc.GetRoomFromPoint(transform.position) != rc.GetRoomFromPoint(player.transform.position))
-                rc.ChangeRoom(player.transform.position);
-        }
+        //if (!PlayerRefracted && !rc.travelling)
+        //{
+        //    GameObject player = GameObject.FindGameObjectWithTag("Player");
+        //    if (rc.GetRoomFromPoint(transform.position) != rc.GetRoomFromPoint(player.transform.position))
+        //        rc.ChangeRoom(player.transform.position);
+        //}
 
         // On right click move to next player in the cycle
         if (Input.GetMouseButtonDown(1) && PlayerRefracted)
@@ -43,7 +45,6 @@ public class PlayerSelector : MonoBehaviour
                 case PlayerColor.BLUE:
 
                     // If all colored players in the same room
-                    RoomController rc = Camera.main.GetComponent<RoomController>();
                     if (rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[1].gameObject) &&
                         rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[2].gameObject) &&
                         rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[3].gameObject))
