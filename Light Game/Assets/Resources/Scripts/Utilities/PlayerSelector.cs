@@ -19,6 +19,15 @@ public class PlayerSelector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Move to player room if not in it
+        if (!PlayerRefracted)
+        {
+            RoomController rc = GetComponent<RoomController>();
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (rc.GetRoomFromPoint(transform.position) != rc.GetRoomFromPoint(player.transform.position))
+                rc.ChangeRoom(player.transform.position);
+        }
+
         // On right click move to next player in the cycle
         if (Input.GetMouseButtonDown(1) && PlayerRefracted)
         {

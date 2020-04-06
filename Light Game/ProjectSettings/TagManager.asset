@@ -12,6 +12,7 @@ TagManager:
   - BlackHole
   - MenuButton
   - Window
+  - LoadingScreen
   layers:
   - Default
   - TransparentFX
