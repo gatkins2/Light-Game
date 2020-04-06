@@ -6,7 +6,6 @@ public class TrailingLight : MonoBehaviour
 {
     Vector2 direction;
     float stepLength;
-    int frameBuffer;
 
     public List<Vector2> path { private get; set; }
     public PlayerMove player { private get; set; }
@@ -14,8 +13,12 @@ public class TrailingLight : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        frameBuffer = 0;
         path.RemoveAt(0);
+
+        // Calculate first vector
+        direction = path[0] - (Vector2)transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     // Update is called once per frame
@@ -23,14 +26,13 @@ public class TrailingLight : MonoBehaviour
     {
         if (!Camera.main.GetComponent<RoomController>().travelling)
         {
-            if (frameBuffer > 0)
+            // If path point reached
+            if (((Vector2)transform.position - path[0]).magnitude <= (GameConstants.TrailingLightMoveSpeed * Time.deltaTime))
             {
-                transform.position += (Vector3)direction.normalized * stepLength;
-                frameBuffer--;
-            }
+                // Move to point
+                transform.position = path[0];
+                path.RemoveAt(0);
 
-            else
-            {
                 // If end of path reached
                 if (path.Count <= 0)
                 {
@@ -54,13 +56,14 @@ public class TrailingLight : MonoBehaviour
 
                     // Calculate next vector
                     direction = path[0] - (Vector2)transform.position;
-                    path.RemoveAt(0);
-                    stepLength = direction.magnitude / 20;
-                    frameBuffer = 20;
                     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
                 }
             }
+
+            else
+                // Move towards next point
+                transform.position += (Vector3)direction.normalized * GameConstants.TrailingLightMoveSpeed * Time.deltaTime;
         }
     }
 

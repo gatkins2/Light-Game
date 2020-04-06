@@ -173,7 +173,7 @@ public class Pointer : MonoBehaviour
             FinalObject = hit.transform;
             ObjectNormal = hit.normal;
         }
-        else if (hit.collider.tag != "BlackHole")
+        else if (hit.collider == null || hit.collider.tag != "BlackHole")
             FinalObject = null;
     }
 
