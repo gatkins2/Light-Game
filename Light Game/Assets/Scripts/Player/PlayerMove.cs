@@ -146,10 +146,6 @@ public class PlayerMove : MonoBehaviour
                 }
             }
 
-            // Hit a menu button
-            else if (pointer.FinalObject != null && pointer.FinalObject.tag == "MenuButton")
-                pointer.FinalObject.GetComponent<CustomMenuButton>().ButtonAction();
-
             else
             {
                 pointer.ErrorFlash();

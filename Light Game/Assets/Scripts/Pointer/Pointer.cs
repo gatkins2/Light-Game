@@ -120,13 +120,6 @@ public class Pointer : MonoBehaviour
             else if (hit.collider != null && hit.collider.tag == "Prism")
                 Refract();
 
-            // Hit menu buttons
-            else if (hit.collider != null && hit.collider.tag == "MenuButton")
-            {
-                hit.transform.GetComponent<CustomMenuButton>().Selected = true;
-                hit.transform.GetComponent<CustomMenuButton>().FrameBuffer = 1;
-            }
-
             // Set the final teleport point
             SetTeleportPoint();
         }

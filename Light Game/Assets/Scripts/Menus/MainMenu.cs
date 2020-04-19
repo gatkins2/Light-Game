@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class StartButton : CustomMenuButton
+public class MainMenu : MonoBehaviour
 {
-    public override void ButtonAction()
+   /// <summary>
+    /// Start button action
+    /// </summary>
+    public void StartButton()
     {
         // Go to loading screen room
         RoomController rc = Camera.main.GetComponent<RoomController>();
@@ -16,5 +18,17 @@ public class StartButton : CustomMenuButton
 
         // Start loading scene
         Camera.main.GetComponent<SceneLoader>().LoadScene("Gameplay");
+    }
+
+    /// <summary>
+    /// Quit button action
+    /// </summary>
+    public void QuitButton()
+    {
+        // Quit the game
+        if (UnityEditor.EditorApplication.isPlaying)
+            UnityEditor.EditorApplication.isPlaying = false;
+        else
+            Application.Quit();
     }
 }
