@@ -95,6 +95,10 @@ public class PlayerMove : MonoBehaviour
                         GameObject light = GameObject.Instantiate(trailingLight, lightList[0], Quaternion.identity);
                         light.GetComponent<TrailingLight>().player = this;
                         light.GetComponent<TrailingLight>().path = lightList;
+                        Color color = GetComponent<SpriteRenderer>().color;
+                        color.a = 0.1f;
+                        light.GetComponent<SpriteRenderer>().color = color;
+                        light.GetComponent<TrailRenderer>().startColor = color;
 
                         // Set player to travelling
                         Enabled = false;

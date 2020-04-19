@@ -91,7 +91,7 @@ public class Prism : MonoBehaviour
         }
 
         // Active when all 4 color pointers are pointing at prism
-        else
+        else if (Camera.main.GetComponent<PlayerSelector>().PlayerRefracted)
         {
             Active = true;
         }
@@ -136,7 +136,7 @@ public class Prism : MonoBehaviour
                         bool noCollision = true;
                         float halfWidth = whitePlayer.GetComponent<BoxCollider2D>().size.x / 2;
                         float halfHeight = whitePlayer.GetComponent<BoxCollider2D>().size.y / 2;
-                        Vector2 startPoint = whitePlayer.transform.position + (transform.up * halfHeight);
+                        Vector2 startPoint = whitePlayer.transform.position + (whitePlayer.transform.up * halfHeight);
                         RaycastHit2D hit = Physics2D.Raycast(startPoint, whitePlayer.transform.right, halfWidth);
                         RaycastHit2D hit2 = Physics2D.Raycast(startPoint, -whitePlayer.transform.right, halfWidth);
                         RaycastHit2D hit3 = Physics2D.Raycast(startPoint, whitePlayer.transform.up, halfHeight);
@@ -171,7 +171,7 @@ public class Prism : MonoBehaviour
                         bool noCollision = false;
                         float halfWidth = playerImages[i].GetComponent<BoxCollider2D>().size.x / 2;
                         float halfHeight = playerImages[i].GetComponent<BoxCollider2D>().size.y / 2;
-                        Vector2 startPoint = playerImages[i].transform.position + (transform.up * halfHeight);
+                        Vector2 startPoint = playerImages[i].transform.position + (playerImages[i].transform.up * halfHeight);
                         RaycastHit2D hit = Physics2D.Raycast(startPoint, playerImages[i].transform.right, halfWidth);
                         RaycastHit2D hit2 = Physics2D.Raycast(startPoint, -playerImages[i].transform.right, halfWidth);
                         RaycastHit2D hit3 = Physics2D.Raycast(startPoint, playerImages[i].transform.up, halfHeight);
@@ -228,7 +228,9 @@ public class Prism : MonoBehaviour
                 GameObject colorPointer = colorPlayer.transform.GetChild(0).GetChild(0).gameObject;
                 Destroy(colorPointer.GetComponent<Pointer>());
                 colorPlayer.GetComponent<PlayerMove>().pointer = colorPointer.AddComponent<ColorPointer>();
-                colorPlayer.GetComponent<SpriteRenderer>().color = playerImages[i].GetComponent<SpriteRenderer>().color;
+                Color color = playerImages[i].GetComponent<SpriteRenderer>().color;
+                color.a = 1;
+                colorPlayer.GetComponent<SpriteRenderer>().color = color;
                 colorPointer.GetComponent<ColorPointer>().normalPointer = colorPointerMaterials[i];
                 colorPointer.GetComponent<ColorPointer>().errorPointer = (Material)Resources.Load("Materials/ErrorLight");
                 colorPointer.GetComponent<ColorPointer>().maxRays = 10;
@@ -244,7 +246,8 @@ public class Prism : MonoBehaviour
                 p.Active = false;
 
             // Show arrows popup
-            if (!PopUpManager.arrowsPopupShown)
+            PopUpManager popupMgr = Camera.main.GetComponent<PopUpManager>();
+            if (popupMgr != null && !PopUpManager.arrowsPopupShown)
                 Camera.main.GetComponent<PopUpManager>().ArrowsPopup(gameObject);
 
             return true;
