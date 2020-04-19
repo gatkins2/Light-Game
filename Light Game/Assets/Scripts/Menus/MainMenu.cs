@@ -9,8 +9,10 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void StartButton()
     {
+        // Disable menu buttons
+        gameObject.SetActive(false);
+
         // Go to loading screen room
-        RoomController rc = Camera.main.GetComponent<RoomController>();
         GameObject loadingScreen = GameObject.FindGameObjectWithTag("LoadingScreen");
         Vector3 position = loadingScreen.transform.position;
         position.z = -10;

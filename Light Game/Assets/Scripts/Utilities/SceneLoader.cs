@@ -10,6 +10,8 @@ public class SceneLoader : MonoBehaviour
     [SerializeField]
     Slider slider;   // Loading bar slider
 
+    const float minLoadTime = 4f;
+
     // Load a scene 
     public void LoadScene(string name)
     {
@@ -20,13 +22,21 @@ public class SceneLoader : MonoBehaviour
     IEnumerator LoadAsynchronously (string name)
     {
         AsyncOperation operation = SceneManager.LoadSceneAsync(name);
+        operation.allowSceneActivation = false;
         loadingCanvas.SetActive(true);
+        float artificialProgress = 0f;
+        float startTime = Time.time;
         
-        while (!operation.isDone)
+        // Display a smooth loading bar
+        while (!operation.isDone && Time.time - startTime < minLoadTime)
         {
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
-            slider.value = progress;
+            artificialProgress += Time.deltaTime / minLoadTime;
+            slider.value = Mathf.Clamp01(Mathf.Min(progress, artificialProgress));
             yield return null;
         }
+
+        // Finish loading scene
+        operation.allowSceneActivation = true;
     }
 }
