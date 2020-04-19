@@ -16,7 +16,7 @@ public class Prism : MonoBehaviour
     Pointer whiteLine;                                              // Line that shows combine refract desitnation
 
     Transform redPlayer, yellowPlayer, greenPlayer, bluePlayer, whitePlayer;     // Colored player images
-    Transform[] playerImages;
+    List<Transform> playerImages;
 
     Material[] colorPointerMaterials;                               // Array of materials to give color players
 
@@ -61,11 +61,11 @@ public class Prism : MonoBehaviour
         greenPlayer = transform.GetChild(7);
         bluePlayer = transform.GetChild(8);
         whitePlayer = transform.GetChild(9);
-        playerImages = new Transform[4];
-        playerImages[0] = redPlayer;
-        playerImages[1] = yellowPlayer;
-        playerImages[2] = greenPlayer;
-        playerImages[3] = bluePlayer;
+        playerImages = new List<Transform>();
+        playerImages.Add(redPlayer);
+        playerImages.Add(yellowPlayer);
+        playerImages.Add(greenPlayer);
+        playerImages.Add(bluePlayer);
 
         // Scale images to 1
         foreach (Transform image in playerImages)
@@ -111,26 +111,43 @@ public class Prism : MonoBehaviour
                 foreach (ColorPointer line in LinesToCombine)
                     direction += (Vector3)(line.path[line.path.Count - 1] - line.path[line.path.Count - 2]).normalized;
 
-                // Get out of prism
-                while (GetComponent<PolygonCollider2D>().OverlapPoint(point))
+                if (direction != Vector3.zero)
                 {
-                    point += direction.normalized * 0.01f;
-                }
-                whiteLine.SetStartPoint(point);
+                    // Get out of prism
+                    while (GetComponent<PolygonCollider2D>().OverlapPoint(point))
+                    {
+                        point += direction.normalized * 0.01f;
+                    }
+                    whiteLine.SetStartPoint(point);
 
-                // Set refracted angle
-                direction = Quaternion.AngleAxis(20, Vector3.forward) * direction;
-                whiteLine.transform.right = direction;
+                    // Set refracted angle
+                    direction = Quaternion.AngleAxis(20, Vector3.forward) * direction;
+                    whiteLine.transform.right = direction;
 
-                whiteLine.Active = true;
+                    whiteLine.Active = true;
 
-                // Activate white player image
-                if (whiteLine.FinalObject != null && whiteLine.FinalObject.tag == "AttachableSurface")
-                {
-                    whitePlayer.transform.position = whiteLine.TeleportPoint;
-                    whitePlayer.GetComponent<SpriteRenderer>().enabled = true;
-                    if (whiteLine.FinalObject != null)
+                    // Activate white player image
+                    if (whiteLine.FinalObject != null && whiteLine.FinalObject.tag == "AttachableSurface")
+                    {
+                        whitePlayer.transform.position = whiteLine.TeleportPoint;
                         whitePlayer.transform.up = whiteLine.ObjectNormal;
+
+                        // Check collision
+                        bool noCollision = true;
+                        float halfWidth = whitePlayer.GetComponent<BoxCollider2D>().size.x / 2;
+                        float halfHeight = whitePlayer.GetComponent<BoxCollider2D>().size.y / 2;
+                        Vector2 startPoint = whitePlayer.transform.position + (transform.up * halfHeight);
+                        RaycastHit2D hit = Physics2D.Raycast(startPoint, whitePlayer.transform.right, halfWidth);
+                        RaycastHit2D hit2 = Physics2D.Raycast(startPoint, -whitePlayer.transform.right, halfWidth);
+                        RaycastHit2D hit3 = Physics2D.Raycast(startPoint, whitePlayer.transform.up, halfHeight);
+                        if (hit.collider != null || hit2.collider != null || hit3.collider != null)
+                            noCollision = false;
+
+                        if (noCollision)
+                            whitePlayer.GetComponent<SpriteRenderer>().enabled = true;
+                    }
+                    else
+                        whitePlayer.GetComponent<SpriteRenderer>().enabled = false;
                 }
                 else
                     whitePlayer.GetComponent<SpriteRenderer>().enabled = false;
@@ -148,9 +165,26 @@ public class Prism : MonoBehaviour
                     if (lines[i].FinalObject != null && lines[i].FinalObject.tag == "AttachableSurface")
                     {
                         playerImages[i].transform.position = lines[i].TeleportPoint;
-                        playerImages[i].GetComponent<SpriteRenderer>().enabled = true;
-                        if (lines[i].FinalObject != null)
-                            playerImages[i].transform.up = lines[i].ObjectNormal;
+                        playerImages[i].transform.up = lines[i].ObjectNormal;
+
+                        // Check collision
+                        bool noCollision = false;
+                        float halfWidth = playerImages[i].GetComponent<BoxCollider2D>().size.x / 2;
+                        float halfHeight = playerImages[i].GetComponent<BoxCollider2D>().size.y / 2;
+                        Vector2 startPoint = playerImages[i].transform.position + (transform.up * halfHeight);
+                        RaycastHit2D hit = Physics2D.Raycast(startPoint, playerImages[i].transform.right, halfWidth);
+                        RaycastHit2D hit2 = Physics2D.Raycast(startPoint, -playerImages[i].transform.right, halfWidth);
+                        RaycastHit2D hit3 = Physics2D.Raycast(startPoint, playerImages[i].transform.up, halfHeight);
+                        if ((hit.collider == null || playerImages.Contains(hit.transform)) &&
+                            (hit2.collider == null || playerImages.Contains(hit2.transform)) &&
+                            (hit3.collider == null || playerImages.Contains(hit3.transform)))
+                            noCollision = true;
+                            
+                        // Enable player image
+                        if (noCollision)
+                            playerImages[i].GetComponent<SpriteRenderer>().enabled = true;
+                        else
+                            playerImages[i].GetComponent<SpriteRenderer>().enabled = false;
                     }
                     else
                         playerImages[i].GetComponent<SpriteRenderer>().enabled = false;
@@ -188,7 +222,7 @@ public class Prism : MonoBehaviour
         {
             // Create player objects at each image
             Camera.main.GetComponent<PlayerSelector>().playerPointers = new Pointer[4];
-            for (int i=0; i<playerImages.Length; i++)
+            for (int i=0; i<playerImages.Count; i++)
             {
                 GameObject colorPlayer = GameObject.Instantiate(player, playerImages[i].transform.position, playerImages[i].rotation);
                 GameObject colorPointer = colorPlayer.transform.GetChild(0).GetChild(0).gameObject;
@@ -208,6 +242,10 @@ public class Prism : MonoBehaviour
             // Dsiable colored lines
             foreach (ColorPointer p in lines)
                 p.Active = false;
+
+            // Show arrows popup
+            if (!PopUpManager.arrowsPopupShown)
+                Camera.main.GetComponent<PopUpManager>().ArrowsPopup(gameObject);
 
             return true;
         }

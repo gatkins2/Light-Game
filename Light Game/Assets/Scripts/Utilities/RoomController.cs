@@ -8,6 +8,15 @@ public class RoomController : MonoBehaviour
     public bool travelling { get; private set; }             // If the camera is travelling to a new room
     Vector3 cameraPosition;                                  // Where the camera should be pointing
 
+    /// <summary>
+    /// Called before Start
+    /// </summary>
+    private void Awake()
+    {
+        // Create background grid
+        Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/RoomTools/BackgroundGrid"), Vector3.zero, Quaternion.identity);
+    }
+
     // Start is called before the first frame update
     void Start()
     {

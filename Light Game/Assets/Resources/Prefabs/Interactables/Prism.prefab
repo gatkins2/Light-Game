@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRays: 10
   maxLength: 1000
-  normalPointer: {fileID: 0}
+  normalPointer: {fileID: 2100000, guid: 02cb17a85738d7c42a76573a2dc757ad, type: 2}
   errorPointer: {fileID: 2100000, guid: baebe42ca3b893b4e826d2a4868b6772, type: 2}
   color: 4
 --- !u!1 &703298893545030912
@@ -164,6 +164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2233292885591694994}
   - component: {fileID: 1779703338792457618}
+  - component: {fileID: 1153266029328168823}
   m_Layer: 0
   m_Name: BluePlayer
   m_TagString: Untagged
@@ -236,6 +237,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &1153266029328168823
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703298893545030912}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.01838684, y: 0.3444196}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 0.64, y: 0.64}
+    newSize: {x: 0.64, y: 0.64}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.38259315, y: 0.50290656}
+  m_EdgeRadius: 0
 --- !u!1 &1858639412957998404
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,6 +417,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4862245518788640671}
   - component: {fileID: 7881257108487498136}
+  - component: {fileID: 3533924559060349443}
   m_Layer: 0
   m_Name: YellowPlayer
   m_TagString: Untagged
@@ -462,6 +490,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &3533924559060349443
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2110442828060936716}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.01838684, y: 0.3444196}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 0.64, y: 0.64}
+    newSize: {x: 0.64, y: 0.64}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.38259315, y: 0.50290656}
+  m_EdgeRadius: 0
 --- !u!1 &2194255726514474007
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,6 +526,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3567627452769995537}
   - component: {fileID: 3898269215990167719}
+  - component: {fileID: 6709879195827777940}
   m_Layer: 0
   m_Name: RedPlayer
   m_TagString: Untagged
@@ -544,6 +599,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &6709879195827777940
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2194255726514474007}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.01838684, y: 0.3444196}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 0.64, y: 0.64}
+    newSize: {x: 0.64, y: 0.64}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.38259315, y: 0.50290656}
+  m_EdgeRadius: 0
 --- !u!1 &2699269213770837345
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,6 +789,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1222351718465784766}
   - component: {fileID: 5935503212564910183}
+  - component: {fileID: 6051222944475704891}
   m_Layer: 0
   m_Name: WhitePlayer
   m_TagString: Untagged
@@ -780,6 +862,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &6051222944475704891
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4233702519700758749}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.01838684, y: 0.3444196}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 0.64, y: 0.64}
+    newSize: {x: 0.64, y: 0.64}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.38259315, y: 0.50290656}
+  m_EdgeRadius: 0
 --- !u!1 &5580567874952588552
 GameObject:
   m_ObjectHideFlags: 0
@@ -1252,6 +1360,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7258327437115633443}
   - component: {fileID: 7403283875502675967}
+  - component: {fileID: 7612192027640837763}
   m_Layer: 0
   m_Name: GreenPlayer
   m_TagString: Untagged
@@ -1324,3 +1433,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &7612192027640837763
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7350188763195525926}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.01838684, y: 0.3444196}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 0.64, y: 0.64}
+    newSize: {x: 0.64, y: 0.64}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.38259315, y: 0.50290656}
+  m_EdgeRadius: 0
