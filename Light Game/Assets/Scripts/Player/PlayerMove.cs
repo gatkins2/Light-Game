@@ -96,8 +96,7 @@ public class PlayerMove : MonoBehaviour
                         light.GetComponent<TrailingLight>().player = this;
                         light.GetComponent<TrailingLight>().path = lightList;
                         Color color = GetComponent<SpriteRenderer>().color;
-                        color.a = 0.1f;
-                        light.GetComponent<SpriteRenderer>().color = color;
+                        color.a = 0.5f;
                         light.GetComponent<TrailRenderer>().startColor = color;
 
                         // Set player to travelling
