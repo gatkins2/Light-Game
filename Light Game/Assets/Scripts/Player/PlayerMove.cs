@@ -56,7 +56,7 @@ public class PlayerMove : MonoBehaviour
         if (pointer.Active)
         {
             // Move to an attachable surface
-            if (pointer.FinalObject != null && (pointer.FinalObject.tag == "AttachableSurface" || pointer.FinalObject.tag == "Window") && 
+            if (pointer.FinalObject != null && (pointer.FinalObject.tag == "AttachableSurface" || pointer.FinalObject.tag == "Window") &&
                 pointer.TeleportPoint != (Vector2)transform.position)
             {
                 // Check if point is in a room
@@ -115,6 +115,8 @@ public class PlayerMove : MonoBehaviour
                         }
                         else
                             GetComponent<AudioSource>().Play();
+
+
                     }
                 }
             }
@@ -148,6 +150,8 @@ public class PlayerMove : MonoBehaviour
                     }
                 }
             }
+            else if (pointer.FinalObject != null && pointer.FinalObject.tag == "VictoryObject")
+                SceneManager.LoadScene("Victory");
 
             else
             {

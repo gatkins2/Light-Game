@@ -47,9 +47,7 @@ public class PlayerSelector : MonoBehaviour
                 case PlayerColor.BLUE:
 
                     // If all colored players in the same room
-                    if (rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[1].gameObject) &&
-                        rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[2].gameObject) &&
-                        rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[3].gameObject))
+                    if (PlayersInSameRoom())
                     {
                         activePlayer = PlayerColor.ALL;
                         foreach (Pointer pointer in playerPointers)
@@ -73,9 +71,7 @@ public class PlayerSelector : MonoBehaviour
                     break;
             }
 
-            // Move camera to active player
-            if (activePlayer != PlayerColor.ALL)
-                GetComponent<RoomController>().ChangeRoom(playerPointers[(int)activePlayer].transform.position);
+            MoveCameraToActivePlayer();
         }
 
         // On left arrow move to previous player in the cycle
@@ -94,9 +90,7 @@ public class PlayerSelector : MonoBehaviour
                     break;
                 case PlayerColor.RED:
                     // If all colored players in the same room
-                    if (rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[1].gameObject) &&
-                        rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[2].gameObject) &&
-                        rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[3].gameObject))
+                    if (PlayersInSameRoom())
                     {
                         activePlayer = PlayerColor.ALL;
                         foreach (Pointer pointer in playerPointers)
@@ -120,9 +114,7 @@ public class PlayerSelector : MonoBehaviour
                     break;
             }
 
-            // Move camera to active player
-            if (activePlayer != PlayerColor.ALL)
-                GetComponent<RoomController>().ChangeRoom(playerPointers[(int)activePlayer].transform.position);
+            MoveCameraToActivePlayer();
         }
 
         // Update GUI
@@ -148,5 +140,26 @@ public class PlayerSelector : MonoBehaviour
         {
             playerSelectGUI.gameObject.SetActive(false);
         }
+    }
+
+    /// <summary>
+    /// Checks if all color players are in the same room
+    /// </summary>
+    /// <returns></returns>
+    public bool PlayersInSameRoom()
+    {
+        return rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[1].gameObject) &&
+               rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[2].gameObject) &&
+               rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[3].gameObject);
+    }
+
+    /// <summary>
+    /// Moves to the room with the active color player
+    /// </summary>
+    public void MoveCameraToActivePlayer()
+    {
+        // Move camera to active player
+        if (activePlayer != PlayerColor.ALL)
+            GetComponent<RoomController>().ChangeRoom(playerPointers[(int)activePlayer].transform.position);
     }
 }

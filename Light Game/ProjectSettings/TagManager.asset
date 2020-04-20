@@ -13,6 +13,7 @@ TagManager:
   - MenuButton
   - Window
   - LoadingScreen
+  - VictoryObject
   layers:
   - Default
   - TransparentFX

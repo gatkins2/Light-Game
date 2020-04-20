@@ -110,7 +110,7 @@ public class Pointer : MonoBehaviour
                 BlackHoleWarp();
 
                 // Combine paths
-                List<Vector2> path2 = hit.transform.GetComponent<BlackHole>().BlackHoleExit.transform.GetChild(1).GetComponent<Pointer>().path;
+                List<Vector2> path2 = hit.transform.GetComponent<BlackHole>().BlackHoleExit.transform.GetComponent<BlackHole>().Pointers[color].path;
                 if (path2 != null && path != path2)
                     foreach (Vector2 item in path2)
                         path.Add(item);
@@ -154,10 +154,17 @@ public class Pointer : MonoBehaviour
         // If on a black hole
         else if (hit.collider.tag == "BlackHole")
         {
-            Pointer exitPointer = hit.transform.GetComponent<BlackHole>().BlackHoleExit.GetComponent<BlackHole>().Pointer;
+            Pointer exitPointer = hit.transform.GetComponent<BlackHole>().BlackHoleExit.GetComponent<BlackHole>().Pointers[color];
             TeleportPoint = exitPointer.TeleportPoint;
             FinalObject = exitPointer.FinalObject;
             ObjectNormal = exitPointer.ObjectNormal;
+        }
+
+        // If on vitory object
+        else if (hit.collider.tag == "VictoryObject")
+        {
+            TeleportPoint = player.position;
+            FinalObject = hit.transform;
         }
 
         // Set final object
@@ -228,14 +235,14 @@ public class Pointer : MonoBehaviour
 
         // Activate black hole
         BlackHole bhScript = exitBlackHole.GetComponent<BlackHole>();
-        bhScript.Active = true;
-        bhScript.FrameBuffer = 1;
+        bhScript.Pointers[color].Active = true;
+        bhScript.FrameBuffers[color] = 1;
 
         // Set exit pointer
-        Pointer exitPointer = bhScript.Pointer;
+        Pointer exitPointer = bhScript.Pointers[color];
         exitPointer.SetStartPoint(ray.origin);
         exitPointer.SetStartDirection(ray.direction);
-        exitPointer.normalPointer = normalPointer;
+        exitPointer.Active = true;
     }
 
     // Reflect a ray across a reflectable surface

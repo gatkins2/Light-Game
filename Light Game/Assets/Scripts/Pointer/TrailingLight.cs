@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TrailingLight : MonoBehaviour
 {
@@ -29,50 +30,70 @@ public class TrailingLight : MonoBehaviour
         if (!roomController.travelling)
         {
             // If path point reached
-            if (((Vector2)transform.position - path[0]).magnitude <= (GameConstants.TrailingLightMoveSpeed * Time.deltaTime))
+            if (path.Count > 0)
             {
-                // Move to point
-                transform.position = path[0];
-                path.RemoveAt(0);
-
-                // If end of path reached
-                if (path.Count <= 0)
+                if (((Vector2)transform.position - path[0]).magnitude <= (GameConstants.TrailingLightMoveSpeed * Time.deltaTime))
                 {
-                    player.Enabled = true;
-                    Destroy(gameObject);
+                    // Move to point
+                    transform.position = path[0];
+                    path.RemoveAt(0);
+
+                    // If end of path reached
+                    if (path.Count <= 0)
+                    {
+                        player.Enabled = true;
+                        Destroy(gameObject);
+                    }
+
+                    else
+                    {
+                        // If vector contains NaN
+                        if (float.IsNaN(path[0].x) && float.IsNaN(path[0].y))
+                        {
+                            // Remove empty point and teleport
+                            path.RemoveAt(0);
+                            if (path.Count > 0)
+                            {
+                                transform.position = path[0];
+                                GetComponent<TrailRenderer>().Clear();
+                                path.RemoveAt(0);
+                            }
+                        }
+
+                        // Calculate next vector
+                        if (path.Count > 0)
+                        {
+                            direction = path[0] - (Vector2)transform.position;
+                            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                        }
+                        else
+                        {
+                            player.Enabled = true;
+                            Destroy(gameObject);
+                        }
+                    }
                 }
 
                 else
-                {
-                    // If vector contains NaN
-                    if (float.IsNaN(path[0].x) && float.IsNaN(path[0].y))
-                    {
-                        // Remove empty point and teleport
-                        path.RemoveAt(0);
-                        if (path.Count > 0)
-                        {
-                            transform.position = path[0];
-                            GetComponent<TrailRenderer>().Clear();
-                            path.RemoveAt(0);
-                        }
-                    }
-
-                    // Calculate next vector
-                    direction = path[0] - (Vector2)transform.position;
-                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                    transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-                }
+                    // Move towards next point
+                    transform.position += (Vector3)direction.normalized * GameConstants.TrailingLightMoveSpeed * Time.deltaTime;
             }
-
             else
-                // Move towards next point
-                transform.position += (Vector3)direction.normalized * GameConstants.TrailingLightMoveSpeed * Time.deltaTime;
+            {
+                player.Enabled = true;
+                Destroy(gameObject);
+            }
         }
     }
 
     // Called when a collision occurs
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // Go to victory screen
+        if (collision.gameObject.tag == "VictoryObject")
+            SceneManager.LoadScene("Victory");
+
         // Pause on room change box
         if (collision.gameObject.tag == "RoomChangeBox")
             Camera.main.GetComponent<RoomController>().ChangeRoom(path[path.Count - 1]);

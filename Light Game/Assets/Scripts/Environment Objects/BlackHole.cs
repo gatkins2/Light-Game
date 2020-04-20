@@ -5,25 +5,32 @@ using UnityEngine;
 public class BlackHole : MonoBehaviour
 {
     public GameObject BlackHoleExit;                // Other black hole to travel to
-    public int FrameBuffer { private get; set; }    // Frame buffer for setting activity
-    public bool Active { get; set; }                // Whether the black hole is active
-    public Pointer Pointer { get; private set; }    // The pointer attached to the black hole
+    public Dictionary<PlayerColor, Pointer> Pointers { get; set; }    // The pointers attached to the black hole
+    public Dictionary<PlayerColor, int> FrameBuffers { get; set; }    // Farme buffers for activating each pointer
 
     Transform sprite;                               // Black hole sprite to rotate
 
     // Start is called before the first frame update
     void Start()
     {
-        // Get sprite and pointer
+        // Get sprite and pointers
         sprite = transform.GetChild(0);
-        Pointer = transform.GetChild(1).GetComponent<Pointer>();
+        Pointers = new Dictionary<PlayerColor, Pointer>();
 
-        // Set pointer to inactive
-        Pointer.Active = false;
+        // Load dictionary
+        Pointers.Add(PlayerColor.WHITE, transform.GetChild(1).GetComponent<Pointer>());
+        Pointers.Add(PlayerColor.RED, transform.GetChild(2).GetComponent<ColorPointer>());
+        Pointers.Add(PlayerColor.YELLOW, transform.GetChild(3).GetComponent<ColorPointer>());
+        Pointers.Add(PlayerColor.GREEN, transform.GetChild(4).GetComponent<ColorPointer>());
+        Pointers.Add(PlayerColor.BLUE, transform.GetChild(5).GetComponent<ColorPointer>());
 
-        // Set default vars
-        FrameBuffer = 0;
-        Active = false;
+        // Initialize frame buffers
+        FrameBuffers = new Dictionary<PlayerColor, int>();
+        FrameBuffers.Add(PlayerColor.WHITE, 0);
+        FrameBuffers.Add(PlayerColor.RED, 0);
+        FrameBuffers.Add(PlayerColor.YELLOW, 0);
+        FrameBuffers.Add(PlayerColor.GREEN, 0);
+        FrameBuffers.Add(PlayerColor.BLUE, 0);
     }
 
     // Update is called once per frame
@@ -33,21 +40,12 @@ public class BlackHole : MonoBehaviour
         sprite.RotateAround(transform.position, Vector3.forward, -18f * Time.deltaTime);
 
         // Set activity
-        if (FrameBuffer > 0)
-            FrameBuffer--;
-        else
-            Active = false;
-
-        if (Active)
+        foreach (KeyValuePair<PlayerColor, Pointer> entry in Pointers)
         {
-            // Activate pointer
-            Pointer.Active = true;
-        }
-
-        else
-        {
-            // Deactiavte pointer
-            Pointer.Active = false;
+            if (FrameBuffers[entry.Key] > 0)
+                FrameBuffers[entry.Key]--;
+            else
+                entry.Value.Active = false;
         }
     }
 }
