@@ -83,18 +83,17 @@ public class Prism : MonoBehaviour
     void Update()
     {
         // Deactivate when not being pointed at
-        if (FrameBuffer > 0)
+        if (!Camera.main.GetComponent<PlayerSelector>().PlayerRefracted && FrameBuffer > 0)
             FrameBuffer--;
-        else if (LinesToCombine.Count < 4)
-        {
-            Active = false;
-        }
 
         // Active when all 4 color pointers are pointing at prism
-        else if (Camera.main.GetComponent<PlayerSelector>().PlayerRefracted)
+        else if (Camera.main.GetComponent<PlayerSelector>().PlayerRefracted && LinesToCombine.Count >= 4)
         {
             Active = true;
         }
+
+        else
+            Active = false;
 
         if (Active)
         {
