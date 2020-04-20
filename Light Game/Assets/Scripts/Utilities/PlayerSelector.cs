@@ -22,8 +22,8 @@ public class PlayerSelector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // On right click move to next player in the cycle
-        if (Input.GetMouseButtonDown(1) && PlayerRefracted)
+        // On right arrow move to next player in the cycle
+        if (Input.GetKeyDown(KeyCode.RightArrow) && PlayerRefracted)
         {
             switch (activePlayer)
             {
@@ -57,6 +57,53 @@ public class PlayerSelector : MonoBehaviour
                     break;
                 case PlayerColor.ALL:
                     activePlayer = PlayerColor.RED;
+                    foreach (Pointer pointer in playerPointers)
+                        pointer.Active = false;
+                    playerPointers[(int)activePlayer].Active = true;
+                    break;
+            }
+
+            // Move camera to active player
+            if (activePlayer != PlayerColor.ALL)
+                GetComponent<RoomController>().ChangeRoom(playerPointers[(int)activePlayer].transform.position);
+        }
+
+        // On left arrow move to previous player in the cycle
+        // On right arrow move to next player in the cycle
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && PlayerRefracted)
+        {
+            switch (activePlayer)
+            {
+                
+                case PlayerColor.YELLOW:
+                case PlayerColor.GREEN:
+                case PlayerColor.BLUE:
+                    playerPointers[(int)activePlayer].Active = false;
+                    activePlayer -= 1;
+                    playerPointers[(int)activePlayer].Active = true;
+                    break;
+                case PlayerColor.RED:
+                    // If all colored players in the same room
+                    if (rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[1].gameObject) &&
+                        rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[2].gameObject) &&
+                        rc.GetObjectRoom(playerPointers[0].gameObject) == rc.GetObjectRoom(playerPointers[3].gameObject))
+                    {
+                        activePlayer = PlayerColor.ALL;
+                        foreach (Pointer pointer in playerPointers)
+                            pointer.Active = true;
+                    }
+
+                    // Otherwise, skip to blue
+                    else
+                    {
+                        playerPointers[(int)activePlayer].Active = false;
+                        activePlayer = PlayerColor.BLUE;
+                        playerPointers[(int)activePlayer].Active = true;
+                    }
+
+                    break;
+                case PlayerColor.ALL:
+                    activePlayer = PlayerColor.BLUE;
                     foreach (Pointer pointer in playerPointers)
                         pointer.Active = false;
                     playerPointers[(int)activePlayer].Active = true;
