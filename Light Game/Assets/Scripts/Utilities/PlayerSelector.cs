@@ -11,12 +11,22 @@ public class PlayerSelector : MonoBehaviour
 
     RoomController rc;
 
+    [SerializeField]
+    Canvas playerSelectGUI;
+    GameObject[] activeSelectors;
+
     // Start is called before the first frame update
     void Start()
     {
+        // Set initial state
         activePlayer = PlayerColor.RED;
         PlayerRefracted = false;
         rc = GetComponent<RoomController>();
+
+        // Initialize active selectors
+        activeSelectors = new GameObject[4];
+        for (int i=0; i<activeSelectors.Length; i++)
+            activeSelectors[i] = playerSelectGUI.transform.GetChild(i + activeSelectors.Length).gameObject;
     }
 
     // Update is called once per frame
@@ -113,6 +123,30 @@ public class PlayerSelector : MonoBehaviour
             // Move camera to active player
             if (activePlayer != PlayerColor.ALL)
                 GetComponent<RoomController>().ChangeRoom(playerPointers[(int)activePlayer].transform.position);
+        }
+
+        // Update GUI
+        if (PlayerRefracted)
+        {
+            playerSelectGUI.gameObject.SetActive(true);
+            if (activePlayer == PlayerColor.ALL)
+            {
+                foreach (GameObject selector in activeSelectors)
+                    if (selector != null)
+                        selector.SetActive(true);
+            }
+            else
+            {
+                foreach (GameObject selector in activeSelectors)
+                    if (selector != null)
+                        selector.SetActive(false);
+                if (activeSelectors[(int)activePlayer] != null)
+                    activeSelectors[(int)activePlayer].SetActive(true);
+            }
+        }
+        else
+        {
+            playerSelectGUI.gameObject.SetActive(false);
         }
     }
 }
