@@ -12,6 +12,11 @@ public class MainMenu : MonoBehaviour
         // Disable menu buttons
         gameObject.SetActive(false);
 
+        // Destroy any light trails
+        TrailingLight[] lightList = GameObject.FindObjectsOfType<TrailingLight>();
+        for (int i = 0; i < lightList.Length; i++)
+            Destroy(lightList[i].gameObject);
+
         // Go to loading screen room
         GameObject loadingScreen = GameObject.FindGameObjectWithTag("LoadingScreen");
         Vector3 position = loadingScreen.transform.position;
