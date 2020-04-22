@@ -14,14 +14,15 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         GameIsPaused = false;
-        pauseMenuUI.SetActive(false);
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
         // Pause/unpause with escape
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && pauseMenuUI != null)
         {
             if (!GameIsPaused)
                 Pause();
