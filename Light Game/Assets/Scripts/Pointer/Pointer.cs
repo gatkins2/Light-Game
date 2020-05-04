@@ -181,6 +181,8 @@ public class Pointer : MonoBehaviour
     protected void PassThrough()
     {
         // Move into box
+        if (hit.collider.tag == "RoomChangeBox")
+            ray.direction = -hit.normal;
         ray.origin = hit.point;
         int tries = 0;
         BoxCollider2D collider = hit.transform.GetComponent<BoxCollider2D>();

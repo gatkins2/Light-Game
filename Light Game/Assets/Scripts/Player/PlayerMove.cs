@@ -74,14 +74,36 @@ public class PlayerMove : MonoBehaviour
                     transform.up = pointer.ObjectNormal;
                     transform.position += transform.up * 0.01f;
 
-                    // If in collision, return to previous location and flash error pointer
+                    // Check top, left, and right collision
                     float halfWidth = GetComponent<BoxCollider2D>().size.x / 2;
                     float halfHeight = GetComponent<BoxCollider2D>().size.y / 2;
                     Vector2 startPoint = transform.position + (transform.up * halfHeight);
-                    RaycastHit2D hit = Physics2D.Raycast(startPoint, transform.right, halfWidth);
-                    RaycastHit2D hit2 = Physics2D.Raycast(startPoint, -transform.right, halfWidth);
-                    RaycastHit2D hit3 = Physics2D.Raycast(startPoint, transform.up, halfHeight);
-                    if (hit.collider != null || hit2.collider != null || hit3.collider != null)
+                    RaycastHit2D rightHit = Physics2D.Raycast(startPoint, transform.right, halfWidth);
+                    RaycastHit2D leftHit = Physics2D.Raycast(startPoint, -transform.right, halfWidth);
+                    RaycastHit2D topHit = Physics2D.Raycast(startPoint, transform.up, halfHeight);
+
+                    // Move away from right collision
+                    float distanceTravelled = 0f;
+                    while (rightHit.collider != null && distanceTravelled < halfWidth)
+                    {
+                        transform.position += -transform.right * 0.01f;
+                        startPoint = transform.position + (transform.up * halfHeight);
+                        rightHit = Physics2D.Raycast(startPoint, transform.right, halfWidth);
+                        distanceTravelled += 0.01f;
+                    }
+
+                    // Move away from left collision
+                    distanceTravelled = 0f;
+                    while (leftHit.collider != null && distanceTravelled < halfWidth)
+                    {
+                        transform.position += transform.right * 0.01f;
+                        startPoint = transform.position + (transform.up * halfHeight);
+                        leftHit = Physics2D.Raycast(startPoint, -transform.right, halfWidth);
+                        distanceTravelled += 0.01f;
+                    }
+
+                    // If still in collision
+                    if (rightHit.collider != null || leftHit.collider != null || topHit.collider != null)
                     {
                         transform.position = lastPosition;
                         transform.up = lastOrientation;
